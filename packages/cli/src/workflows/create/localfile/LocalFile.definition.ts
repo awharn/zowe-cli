@@ -10,8 +10,8 @@
 */
 
 import { ICommandDefinition } from "@zowe/imperative";
+import CreateCommonHandler from "../Create.common.handler";
 import { CreateCommonOptions } from "../Create.common.options";
-import { join } from "path";
 
 
 /**
@@ -26,7 +26,7 @@ export const LocalFile: ICommandDefinition = {
     summary: "Create a z/OSMF workflow on a z/OS system using a local file",
     description: "Create a z/OSMF workflow on a z/OS system using a local file.",
     type: "command",
-    handler: join(__dirname, "../Create.common.handler"),
+    handler: CreateCommonHandler,
     profile: {
         optional: ["zosmf"]
     },

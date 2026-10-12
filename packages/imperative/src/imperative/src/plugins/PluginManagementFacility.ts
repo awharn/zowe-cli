@@ -1193,7 +1193,7 @@ export class PluginManagementFacility {
                             this.pluginIssues.recordIssue(pluginName, IssueSeverity.CMD_ERROR,
                                 "Command name = '" + pluginCmdName + "' has no 'handler' property");
                         }
-                    } else {
+                    } else if (typeof pluginCmdDef.handler === "string") {
                         // the handler file must exist
                         const handlerModulePath =
                             this.formPluginRuntimePath(pluginName, pluginCmdDef.handler);
@@ -1206,6 +1206,8 @@ export class PluginManagementFacility {
                                 "The handler for command = '" + pluginCmdName +
                                 "' does not exist: " + handlerFilePath);
                         }
+                    } else {
+                        // the handler was provided directly as a class - no handler file lookup is necessary
                     }
                 } else if (pluginCmdDef.type.toLowerCase() === "group") {
                     if (Object.prototype.hasOwnProperty.call(pluginCmdDef, "children")) {

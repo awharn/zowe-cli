@@ -11,10 +11,17 @@
 
 import { ICommandExampleDefinition } from "./ICommandExampleDefinition";
 import { IChainedHandlerEntry } from "./handler/IChainedHandlerEntry";
+import { ICommandHandler } from "./handler/ICommandHandler";
 import { ICommandOptionDefinition } from "./option/ICommandOptionDefinition";
 import { ICommandPositionalDefinition } from "./option/ICommandPositionalDefinition";
 import { ICommandDefinitionPassOn } from "./ICommandDefinitionPassOn";
 import { ICommandProfile } from "../doc/profiles/definition/ICommandProfile";
+
+/**
+ * The type of a command handler class - a constructor of a class that implements
+ * ICommandHandler (see ICommandHandler for details).
+ */
+export type ICommandHandlerClass = new (...args: any[]) => ICommandHandler;
 /**
  * Command Segment type - either "group" or "command".
  *
@@ -98,13 +105,15 @@ export interface ICommandDefinition {
      */
     examples?: ICommandExampleDefinition[];
     /**
-     * The handler for this command - this is a string literal that is used on the "require" statement to load the
-     * command handler - The handler itself must implement ICommandHandler. A string is used over an actual
-     * instance because we do not want the handler (and its required dependencies) to be loaded before it is issued.
-     *  @type {string}
+     * The handler for this command - either the command handler class itself, or a string literal that is used on
+     * the "require" statement to load the command handler - The handler itself must implement ICommandHandler.
+     * A string is used over an actual instance because we do not want the handler (and its required dependencies)
+     * to be loaded before it is issued. When the handler class is provided directly, no local lookup of the handler
+     * module is performed; when a string path is provided, the handler is located via the require lookup.
+     *  @type {string | ICommandHandlerClass}
      *  @memberof ICommandDefinition
      */
-    handler?: string;
+    handler?: string | ICommandHandlerClass;
     /**
      * Build this command from multiple handlers chained together, remapping the response
      * to arguments for future handlers in the command.

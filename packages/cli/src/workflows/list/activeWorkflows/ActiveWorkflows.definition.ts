@@ -10,8 +10,8 @@
 */
 
 import { ICommandDefinition } from "@zowe/imperative";
+import ListActiveWorkflowsHandler from "./ActiveWorkflows.handler";
 import { ListActiveWorkflowsOptions } from "./ActiveWorkflows.options";
-import { join } from "path";
 
 
 /**
@@ -28,7 +28,7 @@ export const ActiveWorkflows: ICommandDefinition = {
     "Multiple filters can be used together.\n" +
     "Omitting all options will list all workflows on the sysplex.",
     type: "command",
-    handler: join(__dirname, "ActiveWorkflows.handler"),
+    handler: ListActiveWorkflowsHandler,
     profile: {
         optional: ["zosmf"]
     },

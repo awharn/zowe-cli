@@ -188,4 +188,27 @@ export class CommandUtils {
             return commandTree.name + " " + commandDef.name;
         }
     }
+
+    /**
+     * Restore handler classes provided directly on the original command definitions onto a copy of the command
+     * tree. JSON.stringify drops functions, so any handler specified as a class on the original definition must
+     * be re-attached to the copy. The original and copy are assumed to have identical structure.
+     * @static
+     * @param {ICommandDefinition} original - the original command definition tree
+     * @param {ICommandDefinition} copy - the copy of the original command definition tree
+     * @memberof CommandUtils
+     */
+    public static restoreHandlers(original: ICommandDefinition, copy: ICommandDefinition): void {
+        if (original == null || copy == null) {
+            return;
+        }
+        if (typeof original.handler === "function") {
+            copy.handler = original.handler;
+        }
+        if (original.children != null && copy.children != null) {
+            for (let childIdx = 0; childIdx < original.children.length; childIdx++) {
+                CommandUtils.restoreHandlers(original.children[childIdx], copy.children[childIdx]);
+            }
+        }
+    }
 }

@@ -9,8 +9,8 @@
 *
 */
 
+import InitHandler from "./init.handler";
 import { ICommandDefinition } from "../../../../../cmd";
-import { join } from "path";
 import { ImperativeConfig } from "../../../../../utilities";
 
 /**
@@ -20,7 +20,7 @@ import { ImperativeConfig } from "../../../../../utilities";
 export const initDefinition: ICommandDefinition = {
     name: "init",
     type: "command",
-    handler: join(__dirname, "init.handler"),
+    handler: InitHandler,
     summary: "Init config files",
     description: `Initialize config files. Defaults to initializing "${ImperativeConfig.instance.rootCommandName}.config.json" in the current ` +
         `working directory unless otherwise specified.\n\nUse "--user-config" to init ` +

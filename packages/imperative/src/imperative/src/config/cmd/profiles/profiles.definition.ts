@@ -9,8 +9,8 @@
 *
 */
 
+import ProfilesHandler from "./profiles.handler";
 import { ICommandDefinition } from "../../../../../cmd";
-import { join } from "path";
 
 /**
  * Definition of the paths command.
@@ -19,7 +19,7 @@ import { join } from "path";
 export const profilesDefinition: ICommandDefinition = {
     name: "profiles",
     type: "command",
-    handler: join(__dirname, "profiles.handler"),
+    handler: ProfilesHandler,
     summary: "Displays profile paths",
     description: "Displays profile paths.",
     examples: [

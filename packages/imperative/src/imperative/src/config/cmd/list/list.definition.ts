@@ -9,7 +9,7 @@
 *
 */
 
-import { join } from "path";
+import ListHandler from "./list.handler";
 import { ICommandDefinition } from "../../../../../cmd";
 
 export const listDefinition: ICommandDefinition = {
@@ -18,7 +18,7 @@ export const listDefinition: ICommandDefinition = {
     type: "command",
     summary: "List config properties",
     description: "List config properties.",
-    handler: join(__dirname, "list.handler"),
+    handler: ListHandler,
     positionals: [
         {
             name: "property",

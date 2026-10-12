@@ -10,8 +10,8 @@
 */
 
 import { ICommandDefinition } from "@zowe/imperative";
+import CreateCommonHandler from "../Create.common.handler";
 import { CreateCommonOptions } from "../Create.common.options";
-import { join } from "path";
 
 /**
  * This object defines the command for creating workflow instance from dataset within zosworkflows.
@@ -25,7 +25,7 @@ export const DataSet: ICommandDefinition = {
     summary: "Create a z/OSMF workflow on a z/OS system using a data set",
     description: "Create a z/OSMF workflow on a z/OS system using a data set.",
     type: "command",
-    handler: join(__dirname, "../Create.common.handler"),
+    handler: CreateCommonHandler,
     profile: {
         optional: ["zosmf"]
     },

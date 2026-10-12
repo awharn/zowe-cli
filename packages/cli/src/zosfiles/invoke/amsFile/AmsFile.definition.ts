@@ -10,7 +10,7 @@
 */
 
 import { ICommandDefinition } from "@zowe/imperative";
-import { join } from "path";
+import AmsFileHandler from "./AmsFile.handler";
 import i18nTypings from "../../-strings-/en";
 
 // Does not use the import in anticipation of some internationalization work to be done later.
@@ -26,7 +26,7 @@ export const AmsFileDefinition: ICommandDefinition = {
     summary: strings.FILE_CMD.SUMMARY,
     description: strings.DESCRIPTION,
     type: "command",
-    handler: join(__dirname, "AmsFile.handler"),
+    handler: AmsFileHandler,
     profile: {
         optional: ["zosmf"]
     },

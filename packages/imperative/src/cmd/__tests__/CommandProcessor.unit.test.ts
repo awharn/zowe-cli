@@ -1002,7 +1002,7 @@ describe("Command Processor", () => {
 
     it("should invoke two chained handlers without errors", async () => {
         const commandDef: ICommandDefinition = JSON.parse(JSON.stringify(SAMPLE_COMMAND_REAL_HANDLER));
-        const handler = commandDef.handler;
+        const handler = commandDef.handler as string;
         delete commandDef.handler;
         commandDef.chainedHandlers = [
             {
@@ -1039,7 +1039,7 @@ describe("Command Processor", () => {
 
     it("should handle an imperative error thrown from a chained handler", async () => {
         const commandDef: ICommandDefinition = JSON.parse(JSON.stringify(SAMPLE_COMMAND_REAL_HANDLER));
-        const handlerWithError = commandDef.handler;
+        const handlerWithError = commandDef.handler as string;
         delete commandDef.handler;
         commandDef.chainedHandlers = [{
             handler: handlerWithError,

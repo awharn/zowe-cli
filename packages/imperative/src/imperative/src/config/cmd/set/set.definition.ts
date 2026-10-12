@@ -9,13 +9,13 @@
 *
 */
 
+import SetHandler from "./set.handler";
 import { ICommandDefinition } from "../../../../../cmd";
-import { join } from "path";
 
 export const setDefinition: ICommandDefinition = {
     name: "set",
     type: "command",
-    handler: join(__dirname, "set.handler"),
+    handler: SetHandler,
     summary: "Set configuration property",
     description: "Create or update a configuration property.",
     positionals: [

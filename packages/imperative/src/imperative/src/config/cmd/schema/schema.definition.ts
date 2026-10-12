@@ -9,8 +9,8 @@
 *
 */
 
+import SchemaHandler from "./schema.handler";
 import { ICommandDefinition } from "../../../../../cmd";
-import { join } from "path";
 
 /**
  * Definition of the paths command.
@@ -19,7 +19,7 @@ import { join } from "path";
 export const schemaDefinition: ICommandDefinition = {
     name: "schema",
     type: "command",
-    handler: join(__dirname, "schema.handler"),
+    handler: SchemaHandler,
     summary: "Dumps the JSON schema for the config",
     description: "Dumps the JSON schema for the config. " +
         "The schema is dynamically created based on your available plugins. " +

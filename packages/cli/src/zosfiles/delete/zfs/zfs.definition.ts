@@ -10,7 +10,7 @@
 */
 
 import { ICommandDefinition, ICommandOptionDefinition } from "@zowe/imperative";
-import { join } from "path";
+import ZfsHandler from "./zfs.handler";
 import i18nTypings from "../../-strings-/en";
 
 // Does not use the import in anticipation of some internationalization work to be done later.
@@ -28,7 +28,7 @@ export const ZfsDefinition: ICommandDefinition = {
     summary: strings.SUMMARY,
     description: strings.DESCRIPTION,
     type: "command",
-    handler: join(__dirname, "zfs.handler"),
+    handler: ZfsHandler,
     profile: {
         optional: ["zosmf"]
     },

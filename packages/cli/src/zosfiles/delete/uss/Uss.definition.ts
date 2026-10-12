@@ -10,7 +10,7 @@
 */
 
 import { ICommandDefinition } from "@zowe/imperative";
-import { join } from "path";
+import UssHandler from "./Uss.handler";
 import i18nTypings from "../../-strings-/en";
 
 // Does not use the import in anticipation of some internationalization work to be done later.
@@ -28,7 +28,7 @@ export const UssDefinition: ICommandDefinition = {
     summary: strings.SUMMARY,
     description: strings.DESCRIPTION,
     type: "command",
-    handler: join(__dirname, "Uss.handler"),
+    handler: UssHandler,
     profile: {
         optional: ["zosmf"]
     },

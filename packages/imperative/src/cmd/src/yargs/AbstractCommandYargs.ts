@@ -13,6 +13,7 @@ import { Arguments, Argv } from "yargs";
 import * as lodashDeep from "lodash-deep";
 import { Logger } from "../../../logger";
 import { ICommandDefinition } from "../doc/ICommandDefinition";
+import { CommandUtils } from "../utils/CommandUtils";
 import { CommandProcessor } from "../CommandProcessor";
 import { Constants } from "../../../constants";
 import { IYargsParms } from "./doc/IYargsParms";
@@ -180,7 +181,11 @@ export abstract class AbstractCommandYargs {
      * @return {ICommandDefinition}: A copy of the definition.
      */
     get definition(): ICommandDefinition {
-        return JSON.parse(JSON.stringify(this.mDefinition));
+        const definitionCopy = JSON.parse(JSON.stringify(this.mDefinition));
+        // JSON.stringify drops functions, so restore any handler classes that were provided
+        // directly on this definition or its children
+        CommandUtils.restoreHandlers(this.mDefinition, definitionCopy);
+        return definitionCopy;
     }
 
     /**
@@ -210,7 +215,9 @@ export abstract class AbstractCommandYargs {
      */
     public constructDefinitionTree(): ICommandDefinition {
         const parents: GroupCommandYargs[] = this.parents;
-        return parents[0] ? JSON.parse(JSON.stringify(parents[0].definition)) : {};
+        // The definition getter returns a detached copy of the tree that preserves any
+        // handler classes provided directly on the definitions
+        return parents[0] ? parents[0].definition : ({} as ICommandDefinition);
     }
 
     /**

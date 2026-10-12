@@ -13,6 +13,7 @@ import { Constants } from "../../constants/src/Constants";
 import { ICommandDefinitionPassOn, ICommandDefinitionPassOnIgnore } from "./doc/ICommandDefinitionPassOn";
 import { ImperativeError } from "../../error/src/ImperativeError";
 import { ICommandDefinition } from "./doc/ICommandDefinition";
+import { CommandUtils } from "./utils/CommandUtils";
 import { ProfileUtils } from "../../profiles/src/utils/ProfileUtils";
 import { TextUtils } from "../../utilities/src/TextUtils";
 import { OptionConstants } from "./constants/OptionConstants";
@@ -50,6 +51,10 @@ export class CommandPreparer {
         } catch (e) {
             throw new ImperativeError({ msg: `An error occurred copying the original command document: ${e.message}` });
         }
+
+        // JSON.stringify drops functions, so restore any handler classes that were provided
+        // directly on the command definitions
+        CommandUtils.restoreHandlers(original, copy);
 
         /**
          * Set the default values for optional fields (if they were omitted)

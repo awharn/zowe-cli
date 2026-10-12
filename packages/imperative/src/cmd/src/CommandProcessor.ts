@@ -9,7 +9,7 @@
 *
 */
 
-import { ICommandDefinition } from "./doc/ICommandDefinition";
+import { ICommandDefinition, ICommandHandlerClass } from "./doc/ICommandDefinition";
 import { CommandUtils } from "./utils/CommandUtils";
 import { Arguments } from "yargs";
 import { ICommandValidatorResponse } from "./doc/response/response/ICommandValidatorResponse";
@@ -193,9 +193,14 @@ export class CommandProcessor {
         this.mHelpGenerator = params.helpGenerator;
         ImperativeExpect.toNotBeNullOrUndefined(this.mHelpGenerator, `${CommandProcessor.ERROR_TAG} No help generator supplied.`);
         if (this.mDefinition.type === "command" && this.mDefinition.chainedHandlers == null) {
-            ImperativeExpect.keysToBeDefinedAndNonBlank(this.mDefinition, ["handler"], `${CommandProcessor.ERROR_TAG} ` +
+            ImperativeExpect.toNotBeNullOrUndefined(this.mDefinition.handler, `${CommandProcessor.ERROR_TAG} ` +
                 `The definition supplied is of type "command", ` +
                 `but no handler was specified.`);
+            if (typeof this.mDefinition.handler === "string") {
+                ImperativeExpect.toNotBeEqual(this.mDefinition.handler.trim(), "", `${CommandProcessor.ERROR_TAG} ` +
+                    `The definition supplied is of type "command", ` +
+                    `but the handler specified was blank.`);
+            }
         }
         this.mCommandRootName = params.rootCommandName;
         this.mCommandLine = params.commandLine;
@@ -274,7 +279,11 @@ export class CommandProcessor {
      * @return {ICommandDefinition}: The Zowe Commands definition document.
      */
     get definition(): ICommandDefinition {
-        return JSON.parse(JSON.stringify(this.mDefinition));
+        const definitionCopy = JSON.parse(JSON.stringify(this.mDefinition));
+        // JSON.stringify drops functions, so restore any handler classes that were provided
+        // directly on this definition or its children
+        CommandUtils.restoreHandlers(this.mDefinition, definitionCopy);
+        return definitionCopy;
     }
 
     /**
@@ -282,7 +291,11 @@ export class CommandProcessor {
      * @return {ICommandDefinition}: The Zowe Commands definition document.
      */
     get fullDefinition(): ICommandDefinition {
-        return JSON.parse(JSON.stringify(this.mFullDefinition));
+        const fullDefinitionCopy = JSON.parse(JSON.stringify(this.mFullDefinition));
+        // JSON.stringify drops functions, so restore any handler classes that were provided
+        // directly on the definitions in the tree
+        CommandUtils.restoreHandlers(this.mFullDefinition, fullDefinitionCopy);
+        return fullDefinitionCopy;
     }
 
     /**
@@ -357,10 +370,12 @@ export class CommandProcessor {
         ImperativeExpect.toBeAnArray(params.arguments._,
             `${CommandProcessor.ERROR_TAG} invoke(): The command arguments object supplied does not contain an array of args.`);
         if (this.definition.chainedHandlers == null) {
-            ImperativeExpect.toNotBeNullOrUndefined(this.definition.handler,
+            const handler = this.mDefinition.handler;
+            ImperativeExpect.toNotBeNullOrUndefined(handler,
                 `${CommandProcessor.ERROR_TAG} invoke(): Cannot invoke the command "${this.definition.name}"` +
                 `. It has no handler and no chained handlers.`);
-            ImperativeExpect.toNotBeEqual(this.definition.handler.trim(), "",
+            const handlerIdentifier = typeof handler === "string" ? handler.trim() : handler.name;
+            ImperativeExpect.toNotBeEqual(handlerIdentifier, "",
                 `${CommandProcessor.ERROR_TAG} invoke(): Cannot invoke the handler for command "${this.definition.name}". The handler is blank.`);
         }
 
@@ -595,9 +610,9 @@ export class CommandProcessor {
         // Invoke the handler
         this.log.info(`Invoking process method of handler for "${this.mDefinition.name}" command.`);
 
-        if (this.definition.handler != null) {
+        if (this.mDefinition.handler != null) {
             // single handler - no chained handlers
-            const handler: ICommandHandler = this.attemptHandlerLoad(response, this.definition.handler);
+            const handler: ICommandHandler = this.attemptHandlerLoad(response, this.mDefinition.handler);
             if (handler == null) {
                 // if the handler load failed
                 return this.finishResponse(response);
@@ -619,7 +634,7 @@ export class CommandProcessor {
                 }
             } catch (processErr) {
 
-                this.handleHandlerError(processErr, response, this.definition.handler);
+                this.handleHandlerError(processErr, response, this.mDefinition.handler);
 
                 CliUtils.showMsgWhenDeprecated(handlerParms);
 
@@ -967,20 +982,32 @@ export class CommandProcessor {
     }
 
     /**
-     * Attempt to load a handler
+     * Attempt to load a handler. If the handler class was provided directly on the command definition, it is
+     * instantiated as-is. Otherwise, the handler was provided as a string path and we fall back to a local
+     * lookup of the handler module.
      * @param {CommandResponse} response - command response to use to log errors in case of failure
-     * @param {string} handlerPath - the specified path to the handler, we will attempt to load this
+     * @param {string | ICommandHandlerClass} handler - the handler class, or the specified path to the handler
+     *   module to require
      * @returns {ICommandHandler}
      */
-    private attemptHandlerLoad(response: CommandResponse, handlerPath: string): ICommandHandler {
+    private attemptHandlerLoad(response: CommandResponse, handler: string | ICommandHandlerClass): ICommandHandler {
         try {
-            this.log.info(`Requiring handler "${handlerPath}" for command "${handlerPath}"...`);
-            const commandHandler: ICommandHandlerRequire = require(handlerPath);
-            const handler = new commandHandler.default();
-            this.log.info(`Handler "${handlerPath}" for command "${this.definition.name}" successfully loaded/required.`);
-            return handler;
+            if (typeof handler === "string") {
+                // The handler was provided as a path - fall back to a local lookup to require the handler module
+                this.log.info(`Requiring handler "${handler}" for command "${this.definition.name}"...`);
+                const commandHandler: ICommandHandlerRequire = require(handler);
+                const handlerInstance = new commandHandler.default();
+                this.log.info(`Handler "${handler}" for command "${this.definition.name}" successfully loaded/required.`);
+                return handlerInstance;
+            }
+            // The handler class was provided directly in the definition - no local lookup is necessary
+            this.log.info(`Instantiating handler "${handler.name}" for command "${this.definition.name}"...`);
+            const handlerInstance = new handler();
+            this.log.info(`Handler "${handler.name}" for command "${this.definition.name}" successfully instantiated.`);
+            return handlerInstance;
         } catch (handlerErr) {
-            this.log.error(`Failed to load/require handler "${handlerPath}" for command "${this.definition.name}".`);
+            const handlerDisplay: string = typeof handler === "string" ? nodePath.normalize(handler) : handler.name;
+            this.log.error(`Failed to load handler "${handlerDisplay}" for command "${this.definition.name}".`);
             this.log.error(`Error details: ${handlerErr.message}`);
             this.log.error("Diagnostic information:\n" +
                 "Platform: '%s', Architecture: '%s', Process.argv: '%s'\n" +
@@ -988,7 +1015,7 @@ export class CommandProcessor {
             os.platform(), os.arch(), Censor.censorCommandLine(process.argv.join(" ")),
             Censor.censorEnvVariables());
             const errorMessage: string = TextUtils.formatMessage(couldNotInstantiateCommandHandler.message, {
-                commandHandler: nodePath.normalize(handlerPath) || "\"undefined or not specified\"",
+                commandHandler: handlerDisplay || "\"undefined or not specified\"",
                 definitionName: this.definition.name
             });
             response.failed();
@@ -1040,9 +1067,11 @@ export class CommandProcessor {
      * Respond to an error encountered when invoking a command handler
      * @param {Error | string} handlerErr - the error that was encountered
      * @param {CommandResponse} response - a response object to print error messages to
-     * @param {string}  handlerPath - path to the handler with which an error was encountered
+     * @param {string | ICommandHandlerClass} handler - the handler class or the path to the handler with which
+     *   an error was encountered
      */
-    private handleHandlerError(handlerErr: Error | string, response: CommandResponse, handlerPath: string): void {
+    private handleHandlerError(handlerErr: Error | string, response: CommandResponse, handler: string | ICommandHandlerClass): void {
+        const handlerDisplay: string = typeof handler === "string" ? handler : handler.name;
         // Mark the command as failed
         this.log.error(`Handler for command "${this.definition.name}" failed.`);
 
@@ -1108,7 +1137,7 @@ export class CommandProcessor {
             response.console.errorHeader(unexpectedCommandError.message);
             response.console.error(`Please review the message and stack below.\n` +
                 `Contact the creator of handler:\n` +
-                `"${handlerPath}"`);
+                `"${handlerDisplay}"`);
 
             // Print the message if present
             response.console.errorHeader("Message");
@@ -1142,7 +1171,7 @@ export class CommandProcessor {
             response.console.errorHeader(unexpectedCommandError.message);
             response.console.error("The command indicated failure through an unexpected means.");
             response.console.error(`Contact the creator of handler:`);
-            response.console.error(`"${handlerPath}"`);
+            response.console.error(`"${handlerDisplay}"`);
             response.data.setObj(handlerErr);
         }
     }

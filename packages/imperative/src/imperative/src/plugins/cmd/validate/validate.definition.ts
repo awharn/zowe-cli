@@ -9,8 +9,8 @@
 *
 */
 
+import ValidateHandler from "./validate.handler";
 import { ICommandDefinition } from "../../../../../cmd";
-import { join } from "path";
 
 const pluginDescription =
   "The name of the plug-in to validate.\n" +
@@ -26,7 +26,7 @@ export const validateDefinition: ICommandDefinition = {
     type: "command",
     summary: "Validate a plug-in",
     description: "Validate a plug-in that has been installed.",
-    handler: join(__dirname, "validate.handler"),
+    handler: ValidateHandler,
     positionals: [
         {
             name: "plugin",
