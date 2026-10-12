@@ -9,7 +9,28 @@
 *
 */
 
+const fs = require("fs");
 const path = require("path");
+
+/**
+ * Copies the web-help distribution assets next to the bundle so that the
+ * bundled CLI can generate web help without the @zowe/imperative package tree.
+ */
+class CopyWebHelpPlugin {
+    apply(compiler) {
+        compiler.hooks.done.tap("CopyWebHelpPlugin", () => {
+            const src = path.resolve(__dirname, "..", "imperative", "web-help", "dist");
+            const dest = path.join(path.resolve(__dirname, "bundle"), "web-help", "dist");
+            if (fs.existsSync(src)) {
+                fs.cpSync(src, dest, {recursive: true});
+            } else {
+                console.warn(`CopyWebHelpPlugin: web-help distribution not found at "${src}" - ` +
+                    "web help will not be available in this bundle. " +
+                    "Build @zowe/imperative (npm run build:webHelp) first.");
+            }
+        });
+    }
+}
 
 /**
  * Webpack configuration that produces a single-file bundle of the Zowe CLI.
@@ -29,6 +50,7 @@ module.exports = {
         filename: "main.js",
         clean: true
     },
+    plugins: [new CopyWebHelpPlugin()],
     node: {
         __dirname: false,
         __filename: false
@@ -47,6 +69,20 @@ module.exports = {
         // loads its appenders with a runtime-computed require that cannot be
         // statically analyzed - loaded from node_modules at runtime
         "log4js"
+    ],
+    ignoreWarnings: [
+        {
+            // yargs resolves config-file "extends" and optional peer modules with
+            // runtime-computed requires. Zowe CLI never exercises those code paths.
+            module: /[\\/]node_modules[\\/](yargs|yargs-parser)[\\/]/
+        },
+        {
+            // The plain-Node fallback in RuntimeRequire references require as a
+            // value, which webpack cannot statically extract. Under webpack the
+            // __non_webpack_require__ branch of that expression always wins.
+            module: /[\\/]RuntimeRequire\.js$/,
+            message: /require function is used in a way in which dependencies cannot be statically extracted/
+        }
     ],
     performance: {
         // the bundle is a server-side CLI; size hints are not actionable

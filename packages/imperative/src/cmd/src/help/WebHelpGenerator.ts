@@ -110,11 +110,18 @@ export class WebHelpGenerator {
         fsExtra.emptyDirSync(this.mDocsDir);
         const webHelpDir: string = path.join(this.mDocsDir, "..");
 
-        // Find web help dist folder
-        const distDir: string = path.join(__dirname, "../../../../web-help/dist");
-        if (!fs.existsSync(distDir)) {
+        // Find web help dist folder. Support both the compiled/published package
+        // layout (web-help/dist is four levels up from this module) and a bundled
+        // layout (web-help/dist copied next to the bundle).
+        const candidateDistDirs: string[] = [
+            path.join(__dirname, "../../../../web-help/dist"),
+            path.join(__dirname, "web-help/dist")
+        ];
+        const distDir: string = candidateDistDirs.find((dir: string) => fs.existsSync(dir));
+        if (distDir == null) {
             throw new ImperativeError({
-                msg: `The web-help distribution directory does not exist:\n    "${distDir}"`
+                msg: `The web-help distribution directory does not exist. Searched:\n    ` +
+                    `"${candidateDistDirs.join('"\n    "')}"`
             });
         }
 
