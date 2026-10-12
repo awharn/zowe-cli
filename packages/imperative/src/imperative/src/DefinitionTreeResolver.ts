@@ -13,6 +13,7 @@ import { ICommandDefinition } from "../../cmd";
 import { Logger } from "../../logger";
 import * as glob from "fast-glob";
 import { ImperativeError } from "../../error";
+import { runtimeRequire } from "../../utilities";
 import DefaultRootCommandHandler from "./handlers/DefaultRootCommandHandler";
 
 /**
@@ -122,7 +123,7 @@ export class DefinitionTreeResolver {
             for (const match of matches) {
                 try {
                     this.log.trace("Attempting load of glob match %s", match);
-                    const loadedChild = require(callerDir + "/" + match);
+                    const loadedChild = runtimeRequire(callerDir + "/" + match);
                     this.log.trace("Successfully loaded %s", match);
                     allCmdDefs.push(loadedChild);
                 } catch (e) {

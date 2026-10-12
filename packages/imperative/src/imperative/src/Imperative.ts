@@ -14,6 +14,7 @@
  * require("@zowe/imperative") e.g. const imperative =  require("@zowe/imperative");
  */
 import { Logger} from "../../logger/src/Logger";
+import { runtimeRequire, runtimeResolve } from "../../utilities";
 import { LoggerConfigBuilder } from "../../logger/src/LoggerConfigBuilder";
 import { IImperativeConfig } from "./doc/IImperativeConfig";
 import * as yargs from "yargs";
@@ -136,7 +137,7 @@ export class Imperative {
             /**
              * Identify caller's location on the system
              */
-            ImperativeConfig.instance.callerLocation = require.main.filename;
+            ImperativeConfig.instance.callerLocation = runtimeRequire.main.filename;
 
 
             /**
@@ -155,7 +156,7 @@ export class Imperative {
                 process.argv.includes(Constants.OPT_LONG_DASH + Constants.HELP_WEB_OPTION_ALIAS) ||
                 process.argv.includes(Constants.OPT_LONG_DASH + Constants.VERSION_OPTION) ||
                 process.argv.includes(Constants.OPT_SHORT_DASH + Constants.VERSION_OPTION_ALIAS) ||
-                process.argv[process.argv.length - 1] === require.resolve('@zowe/cli');
+                process.argv[process.argv.length - 1] === runtimeResolve('@zowe/cli');
 
             /**
              * Get the command name from the package bin.

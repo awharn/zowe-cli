@@ -12,7 +12,7 @@
 import { IImperativeConfig } from "../doc/IImperativeConfig";
 import { UpdateImpConfig } from "../UpdateImpConfig";
 import { isAbsolute, join } from "path";
-import { ImperativeConfig, JsUtils } from "../../../utilities";
+import { ImperativeConfig, JsUtils, runtimeRequire, runtimeResolve } from "../../../utilities";
 import { Logger } from "../../../logger";
 import { existsSync } from "fs";
 import { PMFConstants } from "./utilities/PMFConstants";
@@ -325,12 +325,12 @@ export class PluginManagementFacility {
                             // the plugin defines. So we then cd up a directory and resolve the path relative
                             // to the plugin entry file.
                             pathToPluginOverride = join(
-                                require.resolve(this.formPluginRuntimePath(overridePluginNm)),
+                                runtimeResolve(this.formPluginRuntimePath(overridePluginNm)),
                                 "../",
                                 pathToPluginOverride
                             );
                         }
-                        loadedSetting = require(pathToPluginOverride);
+                        loadedSetting = runtimeRequire(pathToPluginOverride);
                         this.impLogger.info(`PluginOverride: Overrode "${settingNm}" ` +
                             `with "${pathToPluginOverride}" from plugin "${overridePluginNm}"`);
                     } catch (requireError) {

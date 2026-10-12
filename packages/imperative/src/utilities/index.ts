@@ -14,6 +14,7 @@ export * from "./src/doc/IDaemonResponse";
 export * from "./src/BufferBuilder";
 export * from "./src/DaemonRequest";
 export * from "./src/ExecUtils";
+export * from "./src/RuntimeRequire";
 export * from "./src/ImperativeConfig";
 export * from "./src/JSONUtils";
 export * from "./src/JsUtils";

@@ -75,8 +75,9 @@ export default class EnableDaemonHandler implements ICommandHandler {
         // determine our current OS
         const sysInfo: ISystemInfo = ProcessUtils.getBasicSystemInfo();
 
-        // form the path to our prebuilds tar file
-        let preBldTgz = __dirname + "../../../../prebuilds/zowe-";
+        // form the path to our prebuilds tar file, locating the prebuilds directory
+        // relative to this module so that both compiled and bundled layouts work
+        let preBldTgz = nodeJsPath.join(this.findPrebuildsDir(), "zowe-");
         let exeFileName = "zowe";
         switch (sysInfo.platform) {
             case "darwin": {
@@ -338,5 +339,31 @@ export default class EnableDaemonHandler implements ICommandHandler {
         }
 
         return userInfoMsg;
+    }
+
+    /**
+     * Locate the prebuilds directory that contains the daemon binaries. The
+     * directory ships at the root of the CLI package, so walk up from this
+     * module's location until it is found. This supports both compiled (lib)
+     * and bundled output layouts.
+     *
+     * @returns the path to the prebuilds directory
+     */
+    private findPrebuildsDir(): string {
+        let dir = __dirname;
+        const maxWalkDepth = 8;
+        for (let depth = 0; depth < maxWalkDepth; depth++) {
+            const candidate = nodeJsPath.join(dir, "prebuilds");
+            if (fs.existsSync(candidate)) {
+                return candidate;
+            }
+            const parent = nodeJsPath.dirname(dir);
+            if (parent === dir) {
+                break;
+            }
+            dir = parent;
+        }
+        // fall back to the location relative to the compiled output layout
+        return nodeJsPath.resolve(__dirname, "../../../../prebuilds");
     }
 }

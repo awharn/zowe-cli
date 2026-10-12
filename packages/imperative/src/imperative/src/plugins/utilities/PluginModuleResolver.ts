@@ -13,6 +13,7 @@ import { existsSync } from "fs";
 import { isAbsolute, join } from "path";
 import { IssueSeverity, PluginIssues } from "./PluginIssues";
 import { PMFConstants } from "./PMFConstants";
+import { runtimeRequire } from "../../../../utilities";
 
 /**
  * Form the runtime path to a module within an installed plugin.
@@ -60,7 +61,7 @@ export function requirePluginModuleCallback(pluginName: string): ((relativePath:
     return (relativePath: string) => {
         const pluginModuleRuntimePath = formPluginRuntimePath(pluginName, relativePath);
         try {
-            return require(pluginModuleRuntimePath);
+            return runtimeRequire(pluginModuleRuntimePath);
         } catch (requireError) {
             PluginIssues.instance.recordIssue(pluginName, IssueSeverity.CMD_ERROR,
                 "Unable to load the following module for plug-in '" +

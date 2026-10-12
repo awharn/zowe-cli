@@ -14,6 +14,7 @@ import { HelpGeneratorFactory } from "../../../cmd/src/help/HelpGeneratorFactory
 import { IHelpGeneratorParms } from "../../../cmd/src/help/doc/IHelpGeneratorParms";
 import { AbstractHelpGeneratorFactory } from "../../../cmd/src/help/abstract/AbstractHelpGeneratorFactory";
 import { IImperativeConfig } from "../doc/IImperativeConfig";
+import { runtimeRequire } from "../../../utilities";
 /**
  * Imperative Help generator factory passed to yargs to build help generators where needed.
  * @export
@@ -63,7 +64,7 @@ export class ImperativeHelpGeneratorFactory extends AbstractHelpGeneratorFactory
                 rootCommandName: this.rootCommandName
             }).getHelpGenerator(generatorParms);
         } else {
-            return new (require(this.config.customHelpGenerator))(generatorParms);
+            return new (runtimeRequire(this.config.customHelpGenerator))(generatorParms);
         }
     }
 

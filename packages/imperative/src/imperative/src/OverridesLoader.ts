@@ -14,7 +14,7 @@ import { CredentialManagerFactory, DefaultCredentialManager, ICredentialManagerI
 import { IImperativeConfig } from "./doc/IImperativeConfig";
 import { isAbsolute, resolve } from "path";
 import { AppSettings } from "../../settings";
-import { ImperativeConfig } from "../../utilities";
+import { ImperativeConfig, runtimeRequire } from "../../utilities";
 import { IConfigVault } from "../../config";
 import { Logger } from "../../logger";
 
@@ -82,7 +82,7 @@ export class OverridesLoader {
         if (overrides.CredentialManager != null || this.shouldUseKeytar(packageJson, useTeamConfig)) {
             let Manager = overrides.CredentialManager;
             if (typeof overrides.CredentialManager === "string" && !isAbsolute(overrides.CredentialManager)) {
-                const resolvePath = ImperativeConfig.instance.callerLocation ?? require.main.filename;
+                const resolvePath = ImperativeConfig.instance.callerLocation ?? runtimeRequire.main.filename;
                 Manager = resolve(resolvePath, "../", overrides.CredentialManager);
             }
 

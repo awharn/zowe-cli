@@ -13,6 +13,7 @@ import { AbstractCredentialManager } from "./abstract/AbstractCredentialManager"
 import { ImperativeError } from "../../error";
 import { ICredentialManagerInit } from "./doc/ICredentialManagerInit";
 import { DefaultCredentialManager } from "./DefaultCredentialManager";
+import { runtimeImport } from "../../utilities";
 
 /**
  * This is a wrapper class that controls access to the credential manager used within
@@ -105,7 +106,7 @@ export class CredentialManagerFactory {
                 // In the case of a string, we make the assumption that it is pointing to the absolute file path of something
                 // that exports a manager class. So we'll load that class and initialize it with the same constructor parameters
                 // that we would do with an actual constructor parameter.
-                const LoadedManager = await import(Manager);
+                const LoadedManager = await runtimeImport(Manager);
                 manager = new LoadedManager(params.service, displayName, params.options);
             } else {
                 manager = new Manager(params.service, displayName, params.options);

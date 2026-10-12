@@ -26,7 +26,7 @@ import { IInvokeCommandParms } from "./doc/parms/IInvokeCommandParms";
 import { ICommandProcessorParms } from "./doc/processor/ICommandProcessorParms";
 import { ImperativeExpect } from "../../expect";
 import { inspect } from "util";
-import { EnvFileUtils, ImperativeConfig, TextUtils } from "../../utilities";
+import { EnvFileUtils, ImperativeConfig, runtimeRequire, TextUtils } from "../../utilities";
 import * as nodePath from "path";
 import * as os from "os";
 import * as stream from "stream";
@@ -995,7 +995,7 @@ export class CommandProcessor {
             if (typeof handler === "string") {
                 // The handler was provided as a path - fall back to a local lookup to require the handler module
                 this.log.info(`Requiring handler "${handler}" for command "${this.definition.name}"...`);
-                const commandHandler: ICommandHandlerRequire = require(handler);
+                const commandHandler: ICommandHandlerRequire = runtimeRequire(handler);
                 const handlerInstance = new commandHandler.default();
                 this.log.info(`Handler "${handler}" for command "${this.definition.name}" successfully loaded/required.`);
                 return handlerInstance;

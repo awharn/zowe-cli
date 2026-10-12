@@ -18,6 +18,7 @@ import { IDaemonContext } from "../../imperative/src/doc/IDaemonContext";
 import { ICommandProfileSchema } from "../../cmd";
 import { Config } from "../../config";
 import { sync } from "find-up";
+import { runtimeRequire } from "./RuntimeRequire";
 import type { ICommandDefinition } from "../../cmd/src/doc/ICommandDefinition";
 import type { IHelpGeneratorFactory } from "../../cmd/src/help/doc/IHelpGeneratorFactory";
 
@@ -87,6 +88,13 @@ export class ImperativeConfig {
      * This is our calling CLI's command name (taken from package.json: bin).
      */
     private mRootCommandName: string;
+
+    /**
+     * This is the package.json of the host application. It is only set when injected
+     * by the host application (for example, a bundled CLI); otherwise the package.json
+     * is located via find-up from the caller location and required on access.
+     */
+    private mCallerPackageJson: any;
 
     /**
      * The config object
@@ -216,10 +224,21 @@ export class ImperativeConfig {
      */
     public get imperativePackageName(): string {
         if (!this.mImperativePackageName) {
-            this.mImperativePackageName = require(join(__dirname, "../../../package.json")).name;
+            this.mImperativePackageName = runtimeRequire(join(__dirname, "../../../package.json")).name;
         }
 
         return this.mImperativePackageName;
+    }
+
+    /**
+     * Set the package name of the imperative application. When set, it takes
+     * precedence over requiring the imperative package.json at runtime, which
+     * allows the host CLI to be bundled with tools like webpack. If not set, the
+     * package name is read from the imperative package.json (the previous behavior).
+     * @param packageName - the name of the imperative framework package
+     */
+    public set imperativePackageName(packageName: string) {
+        this.mImperativePackageName = packageName;
     }
 
     /**
@@ -261,7 +280,21 @@ export class ImperativeConfig {
      * @returns {any} - package.json file of caller
      */
     public get callerPackageJson(): any {
+        if (this.mCallerPackageJson != null) {
+            return this.mCallerPackageJson;
+        }
         return this.getCallerFile("package.json");
+    }
+
+    /**
+     * Set the package.json of the imperative user. When set, it takes precedence
+     * over locating and requiring package.json at runtime, which allows the host
+     * CLI to be bundled with tools like webpack. If not set, the package.json is
+     * located via find-up from the caller location and required (the previous behavior).
+     * @param packageJson - the contents of the host CLI's package.json
+     */
+    public set callerPackageJson(packageJson: any) {
+        this.mCallerPackageJson = packageJson;
     }
 
     /**
@@ -323,14 +356,14 @@ export class ImperativeConfig {
         let findupErr: Error;
         try {
             const filePath = sync(file, {cwd: ImperativeConfig.instance.callerLocation});
-            return require(filePath);
+            return runtimeRequire(filePath);
         } catch (e) {
             // couldn't locate using find-up, try to require directly
             findupErr = e;
         }
         // if we couldn't find the file path through find-up, try requiring the string directly
         try {
-            return require(file);
+            return runtimeRequire(file);
         } catch (e) {
             e.message = "Could not locate the specified module through requiring directly, nor through " +
                 "searching the directories above " + ImperativeConfig.instance.callerLocation +

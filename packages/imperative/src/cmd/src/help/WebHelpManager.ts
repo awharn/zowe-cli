@@ -13,7 +13,7 @@ import * as fs from "fs";
 import * as path from "path";
 
 import { Constants } from "../../../constants/src/Constants";
-import { ImperativeConfig, GuiResult, ProcessUtils } from "../../../utilities";
+import { ImperativeConfig, GuiResult, ProcessUtils, runtimeRequire } from "../../../utilities";
 import { IWebHelpManager } from "./doc/IWebHelpManager";
 import { WebHelpGenerator } from "./WebHelpGenerator";
 import { IHandlerResponseApi } from "../doc/response/api/handler/IHandlerResponseApi";
@@ -195,13 +195,13 @@ export class WebHelpManager implements IWebHelpManager {
         const metadataFile = path.join(this.webHelpDir, "metadata.json");
         let cachedMetadata: IWebHelpPackageMetadata[] = [];
         if (fs.existsSync(metadataFile)) {
-            cachedMetadata = require(metadataFile);
+            cachedMetadata = runtimeRequire(metadataFile);
         }
 
         // Compute current metadata and compare it to cached
         const myConfig: ImperativeConfig = ImperativeConfig.instance;
         const currentMetadata: IWebHelpPackageMetadata[] = this.calcPackageMetadata(myConfig.callerPackageJson,
-            require(path.join(myConfig.cliHome, "plugins", "plugins.json")));
+            runtimeRequire(path.join(myConfig.cliHome, "plugins", "plugins.json")));
 
         const metadataChanged: boolean = process.env.NODE_ENV === "development" ||
             !this.eqPackageMetadata(cachedMetadata, currentMetadata);

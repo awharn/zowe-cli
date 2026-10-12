@@ -15,7 +15,7 @@ import { ICommandHandlerRequire } from "../../cmd/src/doc/handler/ICommandHandle
 import { ICommandProfileAuthConfig } from "../../cmd/src/doc/profiles/definition/ICommandProfileAuthConfig";
 import { ConfigUtils } from "./ConfigUtils";
 import { AbstractAuthHandler } from "../../imperative/src/auth/handlers/AbstractAuthHandler";
-import { ImperativeConfig } from "../../utilities";
+import { ImperativeConfig, runtimeRequire } from "../../utilities";
 import { ISession } from "../../rest/src/session/doc/ISession";
 import { Session } from "../../rest/src/session/Session";
 import { AUTH_TYPE_TOKEN, TOKEN_TYPE_APIML } from "../../rest/src/session/SessConstants";
@@ -103,7 +103,7 @@ export class ConfigAutoStore {
 
         for (const authConfig of authConfigs) {
             const authHandler = typeof authConfig.handler === "string" ?
-                (require(authConfig.handler) as ICommandHandlerRequire).default :
+                (runtimeRequire(authConfig.handler) as ICommandHandlerRequire).default :
                 authConfig.handler;
             const authHandlerClass = new authHandler();
 

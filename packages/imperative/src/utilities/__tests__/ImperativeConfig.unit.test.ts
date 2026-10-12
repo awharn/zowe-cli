@@ -96,6 +96,22 @@ describe("ImperativeConfig", () => {
             expect(pkgJson.name).toBe("@zowe/imperative");
             expect(pkgJson.repository.url).toBe("https://github.com/zowe/zowe-cli.git");
         });
+
+        it("should set and get callerPackageJson", async () => {
+            const mockPkgJson = { name: "my-cli", version: "1.0.0" };
+            ImperativeConfig.instance.callerPackageJson = mockPkgJson;
+            expect(ImperativeConfig.instance.callerPackageJson).toBe(mockPkgJson);
+            // restore the fallback behavior (locate and require package.json at runtime)
+            ImperativeConfig.instance.callerPackageJson = undefined;
+            expect(ImperativeConfig.instance.callerPackageJson.name).toBe("@zowe/imperative");
+        });
+
+        it("should set and get imperativePackageName", async () => {
+            ImperativeConfig.instance.imperativePackageName = "my-imperative";
+            expect(ImperativeConfig.instance.imperativePackageName).toBe("my-imperative");
+            // restore the fallback behavior (read the imperative package.json at runtime)
+            ImperativeConfig.instance.imperativePackageName = undefined;
+        });
     });
 
 });

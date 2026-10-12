@@ -10,7 +10,7 @@
 *
 */
 
-import { IImperativeConfig, Imperative } from "@zowe/imperative";
+import { IImperativeConfig, Imperative, ImperativeConfig } from "@zowe/imperative";
 import { Constants } from "./Constants";
 import { inspect } from "util";
 import { DaemonDecider } from "./daemon/DaemonDecider";
@@ -20,6 +20,12 @@ import cliConfig = require("./imperative");
 const config: IImperativeConfig = {
     configurationModule: cliConfig
 };
+
+// Provide the package metadata to Imperative so it does not need to locate and
+// require package.json files at runtime (which allows the CLI to be bundled with
+// tools like webpack). When not set, Imperative falls back to its own lookup.
+ImperativeConfig.instance.callerPackageJson = require("../package.json");
+ImperativeConfig.instance.imperativePackageName = require("@zowe/imperative/package.json").name;
 
 (async () => {
 
