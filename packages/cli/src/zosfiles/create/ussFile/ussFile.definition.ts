@@ -9,6 +9,7 @@
 *
 */
 
+import UssFileHandler from "./ussFile.handler";
 import { ICommandDefinition } from "@zowe/imperative";
 import { UssCreateOptions } from "./uss.options";
 import i18nTypings from "../../-strings-/en";
@@ -23,7 +24,7 @@ export const UssFileDefinition: ICommandDefinition = {
     summary: ussStrings.SUMMARY,
     description: ussStrings.DESCRIPTION,
     type: "command",
-    handler: __dirname + "/ussFile.handler",
+    handler: UssFileHandler,
     profile: {
         optional: ["zosmf"]
     },

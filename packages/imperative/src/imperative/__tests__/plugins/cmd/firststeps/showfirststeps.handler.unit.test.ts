@@ -20,7 +20,7 @@ import { TextUtils } from "../../../../../utilities";
 import FirststepsHandler from "../../../../src/plugins/cmd/showfirststeps/showfirststeps.handler";
 import { ImperativeError } from "../../../../../error/src/ImperativeError";
 import { IPluginCfgProps } from "../../../../src/plugins/doc/IPluginCfgProps";
-import { PluginManagementFacility } from "../../../../src/plugins/PluginManagementFacility";
+import { PluginCfgPropsStore } from "../../../../src/plugins/utilities/PluginCfgPropsStore";
 
 describe("Plugin first steps command handler", () => {
 
@@ -33,8 +33,6 @@ describe("Plugin first steps command handler", () => {
     const impCfg: ImperativeConfig = ImperativeConfig.instance;
     impCfg.loadedConfig = require("../../__resources__/baseCliConfig.testData");
     impCfg.callerLocation = resolve("../../../../../../imperative-sample/lib/index.js");
-
-    const PMF = PluginManagementFacility.instance as any;
 
     const goodPluginSummary: string = "This is my plugin summary!";
     const goodPluginAliases: string[] = ["sp", "samp"];
@@ -179,7 +177,9 @@ describe("Plugin first steps command handler", () => {
 
         jest.fn().mockReturnValue(mockInstalledPlugins);
 
-        PMF.mAllPluginCfgProps = mockInstalledPlugins;
+        const pluginCfgProps = PluginCfgPropsStore.allPluginCfgProps;
+        pluginCfgProps.length = 0;
+        pluginCfgProps.push(...mockInstalledPlugins);
     });
 
     it("should display proper message when no plugin is provided in arguments", async () => {

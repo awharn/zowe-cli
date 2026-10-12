@@ -9,6 +9,7 @@
 *
 */
 
+import PsHandler from "./Ps.handler";
 import { ICommandDefinition } from "@zowe/imperative";
 import { CreateDefaults } from "@zowe/zos-files-for-zowe-sdk";
 import { ZosFilesCreateExtraOptions, ZosFilesCreateOptions } from "../Create.options";
@@ -28,7 +29,7 @@ export const PsDefinition: ICommandDefinition = {
     summary: strings.ACTIONS.DATA_SET_SEQUENTIAL.SUMMARY,
     description: strings.ACTIONS.DATA_SET_SEQUENTIAL.DESCRIPTION,
     type: "command",
-    handler: __dirname + "/Ps.handler",
+    handler: PsHandler,
     profile: {
         optional: ["zosmf"]
     },

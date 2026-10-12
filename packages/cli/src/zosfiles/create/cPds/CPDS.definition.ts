@@ -9,6 +9,7 @@
 *
 */
 
+import CPDSHandler from "./CPDS.handler";
 import { ICommandDefinition } from "@zowe/imperative";
 import { CreateDefaults } from "@zowe/zos-files-for-zowe-sdk";
 import { ZosFilesCreateExtraOptions, ZosFilesCreateOptions } from "../Create.options";
@@ -27,7 +28,7 @@ export const CPDSDefinition: ICommandDefinition = {
     summary: strings.ACTIONS.DATA_SET_C.SUMMARY,
     description: strings.ACTIONS.DATA_SET_C.DESCRIPTION,
     type: "command",
-    handler: __dirname + "/CPDS.handler",
+    handler: CPDSHandler,
     profile: {
         optional: ["zosmf"]
     },

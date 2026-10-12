@@ -22,6 +22,7 @@ import { IHelpGeneratorFactory } from "../help/doc/IHelpGeneratorFactory";
 import { DaemonRequest, ImperativeConfig } from "../../../utilities";
 import { closest } from "fastest-levenshtein";
 import { COMMAND_RESPONSE_FORMAT } from "../doc/response/api/processor/ICommandResponseApi";
+import FailedCommandHandler from "../handlers/FailedCommandHandler";
 
 /**
  * Before invoking commands, this class configures some settings and callbacks in Yargs,
@@ -282,7 +283,7 @@ export class YargsConfigurer {
     private buildFailedCommandDefinition(): ICommandDefinition {
         return {
             name: this.rootCommandName + " " + ImperativeConfig.instance.commandLine,
-            handler: __dirname + "/../handlers/FailedCommandHandler",
+            handler: FailedCommandHandler,
             type: "command",
             description: "The command you tried to invoke failed"
         };

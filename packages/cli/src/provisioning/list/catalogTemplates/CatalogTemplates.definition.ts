@@ -9,7 +9,7 @@
 *
 */
 
-import * as path from "path";
+import CatalogTemplatesHandler from "./CatalogTemplates.handler";
 import { ICommandDefinition } from "@zowe/imperative";
 
 export const catalogTemplates: ICommandDefinition = {
@@ -18,7 +18,7 @@ export const catalogTemplates: ICommandDefinition = {
     type: "command",
     summary: "List z/OSMF published catalog templates",
     description: "Lists the z/OSMF service catalog published templates.",
-    handler: path.join(__dirname, "/CatalogTemplates.handler"),
+    handler: CatalogTemplatesHandler,
     profile: {
         optional: ["zosmf"]
     },

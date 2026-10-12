@@ -9,6 +9,7 @@
 *
 */
 
+import JobStatusByJobidHandler from "./JobStatusByJobid.handler";
 import { ICommandDefinition } from "@zowe/imperative";
 
 export const JobStatusByJobidDefinition: ICommandDefinition = {
@@ -19,7 +20,7 @@ export const JobStatusByJobidDefinition: ICommandDefinition = {
     description: "View status details of a single z/OS job on spool/JES queues. " +
         "The command does not prevalidate the JOBID. " +
         "The command presents errors verbatim from the z/OSMF Jobs REST endpoints (expect for \"no jobs found\").",
-    handler: __dirname + "/JobStatusByJobid.handler",
+    handler: JobStatusByJobidHandler,
     profile: {
         optional: ["zosmf"]
     },

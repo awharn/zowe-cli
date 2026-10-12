@@ -9,6 +9,7 @@
 *
 */
 
+import LocalfileSpoolddHandler from "./LocalfileSpooldd.handler";
 import { ICommandDefinition } from "@zowe/imperative";
 import { CompareOptions } from "../Compare.options";
 import i18nTypings from "../../-strings-/en";
@@ -26,7 +27,7 @@ export const LocalfileSpoolddDefinition: ICommandDefinition = {
     summary: strings.ACTIONS.LOCAL_FILE_SPOOL_DD.SUMMARY,
     description: strings.ACTIONS.LOCAL_FILE_SPOOL_DD.DESCRIPTION,
     type: "command",
-    handler: __dirname + "/LocalfileSpooldd.handler",
+    handler: LocalfileSpoolddHandler,
     profile: {
         optional: ["zosmf"],
     },

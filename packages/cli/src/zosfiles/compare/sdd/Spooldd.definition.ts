@@ -9,6 +9,7 @@
 *
 */
 
+import SpoolddHandler from "./Spooldd.handler";
 import { ICommandDefinition } from "@zowe/imperative";
 import { CompareOptions } from "../Compare.options";
 import i18nTypings from "../../-strings-/en";
@@ -26,7 +27,7 @@ export const SpoolddDefinition: ICommandDefinition = {
     summary: strings.ACTIONS.SPOOL_DD.SUMMARY,
     description: strings.ACTIONS.SPOOL_DD.DESCRIPTION,
     type: "command",
-    handler: __dirname + "/Spooldd.handler",
+    handler: SpoolddHandler,
     profile: {
         optional: ["zosmf"],
     },

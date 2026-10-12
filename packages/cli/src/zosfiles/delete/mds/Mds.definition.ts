@@ -9,6 +9,7 @@
 *
 */
 
+import MDSHandler from "./Mds.handler";
 import { ICommandDefinition } from "@zowe/imperative";
 
 import i18nTypings from "../../-strings-/en";
@@ -22,7 +23,7 @@ export const MdsDefinition: ICommandDefinition = {
     summary: strings.SUMMARY,
     description: strings.DESCRIPTION,
     type: "command",
-    handler: __dirname + "/Mds.handler",
+    handler: MDSHandler,
     profile: {
         optional: ["zosmf"]
     },

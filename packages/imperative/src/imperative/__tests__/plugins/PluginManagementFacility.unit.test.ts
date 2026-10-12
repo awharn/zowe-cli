@@ -25,6 +25,7 @@ import { IssueSeverity, PluginIssues } from "../../src/plugins/utilities/PluginI
 import { join, resolve } from "path";
 import { PluginManagementFacility } from "../../src/plugins/PluginManagementFacility";
 import { PMFConstants } from "../../src/plugins/utilities/PMFConstants";
+import { PluginCfgPropsStore } from "../../src/plugins/utilities/PluginCfgPropsStore";
 import * as jsonfile from "jsonfile";
 import { ConfigurationLoader } from "../../src/ConfigurationLoader";
 import { ConfigurationValidator } from "../../src/ConfigurationValidator";
@@ -1792,8 +1793,10 @@ describe("Plugin Management Facility", () => {
             // mocking addPlugin function
             mocks.readFileSync.mockReturnValue(mockInstalledPlugins);
 
-            const savedPluginCfgProps = PMF.mAllPluginCfgProps;
-            PMF.mAllPluginCfgProps = mockInstalledPlugins;
+            const savedPluginCfgProps = PluginCfgPropsStore.allPluginCfgProps.slice();
+            const pluginCfgProps = PluginCfgPropsStore.allPluginCfgProps;
+            pluginCfgProps.length = 0;
+            pluginCfgProps.push(...mockInstalledPlugins);
 
             PMF.addAllPluginsToHostCli(PMF.resolvedCliCmdTree);
 
@@ -1801,7 +1804,8 @@ describe("Plugin Management Facility", () => {
             expect(mockAddPlugin.mock.calls[0][0]).toBe(mockInstalledPlugins[0]);
             expect(mockAddPlugin.mock.calls[1][0]).toBe(mockInstalledPlugins[1]);
 
-            PMF.mAllPluginCfgProps = savedPluginCfgProps;
+            pluginCfgProps.length = 0;
+            pluginCfgProps.push(...savedPluginCfgProps);
         });
     }); // end addAllPlugins
 

@@ -9,6 +9,8 @@
 *
 */
 
+import ApimlAuthHandler from "./auth/ApimlAuthHandler";
+import ApimlAutoInitHandler from "./config/auto-init/ApimlAutoInitHandler";
 import * as path from "path";
 
 import { IImperativeConfig } from "@zowe/imperative";
@@ -65,7 +67,7 @@ const config: IImperativeConfig = {
         authConfig: [
             {
                 serviceName: "apiml",
-                handler: __dirname + "/auth/ApimlAuthHandler",
+                handler: ApimlAuthHandler,
                 login: {
                     summary: ProfileConstants.APIML_LOGIN_SUMMARY,
                     description: ProfileConstants.APIML_LOGIN_DESCRIPTION,
@@ -109,7 +111,7 @@ const config: IImperativeConfig = {
         }
     },
     configAutoInitCommandConfig: {
-        handler: __dirname + "/config/auto-init/ApimlAutoInitHandler",
+        handler: ApimlAutoInitHandler,
         provider: "APIML",
         autoInit: {
             options: [

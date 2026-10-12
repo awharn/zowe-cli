@@ -9,6 +9,7 @@
 *
 */
 
+import DataSetHandler from "./ds.handler";
 import { ICommandDefinition } from "@zowe/imperative";
 import { ZosFilesCreateExtraOptions, ZosFilesCreateOptions } from "../Create.options";
 import i18nTypings from "../../-strings-/en";
@@ -26,7 +27,7 @@ export const DsDefinition: ICommandDefinition = {
     summary: strings.ACTIONS.DATA_SET_LIKE.SUMMARY,
     description: strings.ACTIONS.DATA_SET_LIKE.DESCRIPTION,
     type: "command",
-    handler: __dirname + "/ds.handler",
+    handler: DataSetHandler,
     profile: {
         optional: ["zosmf"]
     },

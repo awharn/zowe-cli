@@ -9,7 +9,6 @@
 *
 */
 
-import { Imperative } from "../../../imperative/src/Imperative";
 import { ICommandTreeEntry } from "../../../cmd/src/utils/CommandUtils";
 import { CommandUtils } from "../../../cmd/src/utils/CommandUtils";
 import { ICommandHandler, IHandlerParameters } from "../../../cmd";
@@ -38,10 +37,11 @@ export default class DefaultRootCommandHandler implements ICommandHandler {
         } else if(params.arguments.availableCommands) {
 
             // Gather and display the full set of commands available to the CLI with descriptions
-            const cmdList: ICommandTreeEntry[] = CommandUtils.flattenCommandTree(Imperative.fullCommandTree);
+            const cmdList: ICommandTreeEntry[] = CommandUtils.flattenCommandTree(ImperativeConfig.instance.fullCommandTree);
             cmdList.forEach((cmd: ICommandTreeEntry) => {
                 if (cmd.command.type === "command") {
-                    params.response.console.log(Imperative.highlightWithPrimaryColor(`${Imperative.rootCommandName.trim()} ${cmd.fullName.trim()}`));
+                    params.response.console.log(TextUtils.chalk[ImperativeConfig.instance.loadedConfig.primaryTextColor](
+                        `${ImperativeConfig.instance.rootCommandName.trim()} ${cmd.fullName.trim()}`));
                     params.response.console.log("");
                     params.response.console.log(TextUtils.wordWrap(cmd.command.description,
                         TextUtils.DEFAULT_WRAP_WIDTH,
@@ -50,11 +50,11 @@ export default class DefaultRootCommandHandler implements ICommandHandler {
                 }
             });
 
-            params.response.data.setObj(Imperative.fullCommandTree, false);
+            params.response.data.setObj(ImperativeConfig.instance.fullCommandTree, false);
         } else if (params.arguments.helpWeb) {
             WebHelpManager.instance.openRootHelp(params.response);
         } else {
-            params.response.console.log(Buffer.from(Imperative.getHelpGenerator({
+            params.response.console.log(Buffer.from(ImperativeConfig.instance.helpGeneratorFactory.getHelpGenerator({
                 commandDefinition: params.definition,
                 fullCommandTree: params.fullDefinition,
                 experimentalCommandsDescription: ImperativeConfig.instance.loadedConfig.experimentalCommandDescription

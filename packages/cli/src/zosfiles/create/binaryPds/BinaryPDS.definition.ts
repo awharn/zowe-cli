@@ -9,6 +9,7 @@
 *
 */
 
+import BinaryPDSHandler from "./BinaryPDS.handler";
 import { ICommandDefinition } from "@zowe/imperative";
 import { CreateDefaults } from "@zowe/zos-files-for-zowe-sdk";
 import { ZosFilesCreateExtraOptions, ZosFilesCreateOptions } from "../Create.options";
@@ -27,7 +28,7 @@ export const BinaryPDSDefinition: ICommandDefinition = {
     summary: strings.ACTIONS.DATA_SET_BINARY.SUMMARY,
     description: strings.ACTIONS.DATA_SET_BINARY.DESCRIPTION,
     type: "command",
-    handler: __dirname + "/BinaryPDS.handler",
+    handler: BinaryPDSHandler,
     profile: {
         optional: ["zosmf"]
     },

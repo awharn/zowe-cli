@@ -9,6 +9,7 @@
 *
 */
 
+import AliasHandler from "./Alias.handler";
 import { ICommandDefinition } from "@zowe/imperative";
 import i18nTypings from "../../-strings-/en";
 
@@ -25,7 +26,7 @@ export const AliasDefinition: ICommandDefinition = {
     summary: strings.SUMMARY,
     description: strings.DESCRIPTION,
     type: "command",
-    handler: __dirname + "/Alias.handler",
+    handler: AliasHandler,
     profile: {
         optional: ["zosmf"]
     },

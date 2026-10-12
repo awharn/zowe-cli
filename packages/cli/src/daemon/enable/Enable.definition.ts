@@ -9,6 +9,7 @@
 *
 */
 
+import EnableDaemonHandler from "./Enable.handler";
 import { ICommandDefinition } from "@zowe/imperative";
 
 export const EnableCommand: ICommandDefinition = {
@@ -22,7 +23,7 @@ export const EnableCommand: ICommandDefinition = {
         "If it isn't, the command will instruct you to add it manually. " +
         "Otherwise, you continue to run the classic Zowe CLI interpreter.",
     type: "command",
-    handler: __dirname + "/Enable.handler",
+    handler: EnableDaemonHandler,
     examples: [
         {
             description: "Enable daemon-mode",

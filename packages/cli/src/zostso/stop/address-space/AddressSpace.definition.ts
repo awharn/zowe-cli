@@ -9,6 +9,7 @@
 *
 */
 
+import Handler from "./AddressSpace.handler";
 import { ICommandDefinition } from "@zowe/imperative";
 
 export const AddressSpaceDefinition: ICommandDefinition = {
@@ -18,7 +19,7 @@ export const AddressSpaceDefinition: ICommandDefinition = {
     description: "Stop a TSO address space, from which " +
     "you previously started and received a token (a.k.a 'servlet-key').",
     type: "command",
-    handler: __dirname + "/AddressSpace.handler",
+    handler: Handler,
     profile: {
         optional: ["zosmf"]
     },

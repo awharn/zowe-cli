@@ -9,6 +9,7 @@
 *
 */
 
+import Handler from "./SendASApp.handler";
 import { ICommandDefinition, ICommandOptionDefinition } from "@zowe/imperative";
 import { TsoProfileConstants } from "@zowe/zos-tso-for-zowe-sdk";
 
@@ -18,7 +19,7 @@ export const SendASApp: ICommandDefinition = {
     summary: "Send message to an application at a TSO address space",
     description: "Send message to an application at a TSO address space,",
     type: "command",
-    handler: __dirname + "/SendASApp.handler",
+    handler: Handler,
     profile: {
         optional: ["zosmf", "tso"]
     },

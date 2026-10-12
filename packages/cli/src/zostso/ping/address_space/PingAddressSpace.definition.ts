@@ -9,6 +9,7 @@
 *
 */
 
+import Handler from "./PingAddressSpace.handler";
 import { ICommandDefinition } from "@zowe/imperative";
 
 export const PingAddressSpaceCommandDefinition: ICommandDefinition = {
@@ -18,7 +19,7 @@ export const PingAddressSpaceCommandDefinition: ICommandDefinition = {
     description: "Ping a TSO address space, from which " +
     "you previously started and received a token (a.k.a 'servlet-key').",
     type: "command",
-    handler: __dirname + "/PingAddressSpace.handler",
+    handler: Handler,
     profile: {
         optional: ["zosmf"]
     },

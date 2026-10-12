@@ -9,6 +9,7 @@
 *
 */
 
+import DsmHandler from "./Dsm.handler";
 import { ICommandDefinition } from "@zowe/imperative";
 
 import i18nTypings from "../../-strings-/en";
@@ -23,7 +24,7 @@ export const DsmDefinition: ICommandDefinition = {
     summary: dsmStrings.SUMMARY,
     description: dsmStrings.DESCRIPTION,
     type: "command",
-    handler: __dirname + "/Dsm.handler",
+    handler: DsmHandler,
     profile: {
         optional: ["zosmf"]
     },

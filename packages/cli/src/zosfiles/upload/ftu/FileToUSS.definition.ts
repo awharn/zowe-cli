@@ -9,7 +9,7 @@
 *
 */
 
-import * as path from "path";
+import FileToUSSHandler from "./FileToUSS.handler";
 import { ICommandDefinition } from "@zowe/imperative";
 import { UploadOptions } from "../Upload.options";
 
@@ -28,7 +28,7 @@ export const FileToUSSDefinition: ICommandDefinition = {
     summary: strings.SUMMARY,
     description: strings.DESCRIPTION,
     type: "command",
-    handler: path.join(__dirname, "/FileToUSS.handler"),
+    handler: FileToUSSHandler,
     profile: {
         optional: ["zosmf"]
     },

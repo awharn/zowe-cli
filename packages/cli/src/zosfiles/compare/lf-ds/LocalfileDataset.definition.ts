@@ -9,6 +9,7 @@
 *
 */
 
+import LocalfileDatasetHandler from "./LocalfileDataset.handler";
 import { ICommandDefinition } from "@zowe/imperative";
 import { CompareOptions } from "../Compare.options";
 import i18nTypings from "../../-strings-/en";
@@ -26,7 +27,7 @@ export const LocalfileDatasetDefinition: ICommandDefinition = {
     summary: strings.ACTIONS.LOCAL_FILE_DATA_SET.SUMMARY,
     description: strings.ACTIONS.LOCAL_FILE_DATA_SET.DESCRIPTION,
     type: "command",
-    handler: __dirname + "/LocalfileDataset.handler",
+    handler: LocalfileDatasetHandler,
     profile: {
         optional: ["zosmf"],
     },

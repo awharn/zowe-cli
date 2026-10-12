@@ -9,8 +9,8 @@
 *
 */
 
+import InstanceInfoHandler from "./InstanceInfo.handler";
 import { ICommandDefinition } from "@zowe/imperative";
-import * as path from "path";
 
 export const instanceInfo: ICommandDefinition = {
     name: "instance-info",
@@ -18,7 +18,7 @@ export const instanceInfo: ICommandDefinition = {
     type: "command",
     summary: "List Provisioned Instance Details",
     description: "List details about an instance provisioned with z/OSMF.",
-    handler:  path.join(__dirname, "/InstanceInfo.handler"),
+    handler: InstanceInfoHandler,
     profile: {
         optional: ["zosmf"]
     },

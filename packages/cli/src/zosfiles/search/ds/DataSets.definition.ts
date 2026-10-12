@@ -9,6 +9,7 @@
 *
 */
 
+import DataSetsHandler from "./DataSets.handler";
 import { ICommandDefinition } from "@zowe/imperative";
 import i18nTypings from "../../-strings-/en";
 import { maxConcurrentRequestsMaxValue } from "../../download/Download.options";
@@ -27,7 +28,7 @@ export const DataSetsDefinition: ICommandDefinition = {
     summary: dataSetStrings.SUMMARY,
     description: dataSetStrings.DESCRIPTION,
     type: "command",
-    handler: __dirname + "/DataSets.handler",
+    handler: DataSetsHandler,
     profile: {
         optional: ["zosmf"]
     },

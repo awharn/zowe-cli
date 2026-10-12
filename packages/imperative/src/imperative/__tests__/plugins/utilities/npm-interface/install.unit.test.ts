@@ -43,7 +43,7 @@ import * as jsonfile from "jsonfile";
 import * as findUp from "find-up";
 import * as npmFns from "../../../../src/plugins/utilities/NpmFunctions";
 import { ConfigSchema } from "../../../../../config/src/ConfigSchema";
-import { PluginManagementFacility } from "../../../../src/plugins/PluginManagementFacility";
+import * as PluginModuleResolver from "../../../../src/plugins/utilities/PluginModuleResolver";
 import { AbstractPluginLifeCycle } from "../../../../src/plugins/AbstractPluginLifeCycle";
 import { ConfigurationLoader } from "../../../../src/ConfigurationLoader";
 import { UpdateImpConfig } from "../../../../src/UpdateImpConfig";
@@ -62,14 +62,13 @@ function setResolve(toResolve: string, resolveTo?: string) {
 
 describe("PMF: Install Interface", () => {
     // Objects created so types are correct.
-    const pmfI = PluginManagementFacility.instance;
     const mocks = {
         installPackages: jest.spyOn(npmFns, "installPackages"),
         readFileSync: jest.spyOn(jsonfile, "readFileSync"),
         writeFileSync: jest.spyOn(jsonfile, "writeFileSync"),
         findUpSync: jest.spyOn(findUp, "sync"),
         getPackageInfo: jest.spyOn(npmFns, "getPackageInfo"),
-        requirePluginModuleCallback: jest.spyOn(pmfI, "requirePluginModuleCallback"),
+        requirePluginModuleCallback: jest.spyOn(PluginModuleResolver, "requirePluginModuleCallback"),
         loadConfiguration: jest.spyOn(ConfigurationLoader, "load"),
         addProfiles: jest.spyOn(UpdateImpConfig, "addProfiles"),
         spawnSync: jest.spyOn(spawn, "sync"),
@@ -594,7 +593,7 @@ describe("PMF: Install Interface", () => {
         beforeAll(() => {
             // make requirePluginModuleCallback return our fake LifeCycleClass
             requirePluginModuleCallbackSpy = jest.spyOn(
-                PluginManagementFacility.instance, "requirePluginModuleCallback").
+                PluginModuleResolver, "requirePluginModuleCallback").
                 mockImplementation((_pluginName: string) => {
                     return () => {
                         return LifeCycleClass as any;

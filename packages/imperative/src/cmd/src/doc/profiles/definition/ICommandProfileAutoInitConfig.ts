@@ -10,13 +10,17 @@
 */
 
 import { IPartialCommandDefinition } from "../../IPartialCommandDefinition";
+import { ICommandHandlerClass } from "../../ICommandDefinition";
 
 export interface ICommandProfileAutoInitConfig {
     /**
-     * Path to the handler for the authentication service.
-     * The handler should inherit from Imperative BaseAuthHandler.
+     * The handler for the auto-init command - either the handler class itself,
+     * or a path to the handler module. The handler should inherit from Imperative
+     * BaseAutoInitHandler. When the handler class is provided directly, no local
+     * lookup of the handler module is performed; when a string path is provided,
+     * the handler is located via the require lookup.
      */
-    handler: string;
+    handler: string | ICommandHandlerClass;
 
     /**
      * The provider giving connection information and details for the automatically generated config

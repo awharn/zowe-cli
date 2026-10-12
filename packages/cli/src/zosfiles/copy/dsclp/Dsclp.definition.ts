@@ -9,7 +9,8 @@
 *
 */
 
-import { join } from "path";
+import TargetProfileHandler from "./TargetProfile.handler";
+import DsclpHandler from "./Dsclp.handler";
 import { CliUtils, IChainedHandlerArgumentMapping, ICommandDefinition, ICommandOptionDefinition,
     ICommandPositionalDefinition } from "@zowe/imperative";
 import { ZosmfSession } from "@zowe/zosmf-for-zowe-sdk";
@@ -137,7 +138,7 @@ export const DsclpDefinition: ICommandDefinition = {
     type: "command",
     chainedHandlers: [
         {
-            handler: join(__dirname, "TargetProfile.handler"),
+            handler: TargetProfileHandler,
             mapping: [
                 ...buildChainedHandlerArgMapping(ZosmfSession.ZOSMF_CONNECTION_OPTIONS),
                 ...buildChainedHandlerArgMapping(TargetZosmfOptions),
@@ -148,7 +149,7 @@ export const DsclpDefinition: ICommandDefinition = {
             ]
         },
         {
-            handler: join(__dirname, "Dsclp.handler"),
+            handler: DsclpHandler,
             mapping: [
                 ...buildChainedHandlerArgMapping(Positionals),
                 ...buildChainedHandlerArgMapping(ZosmfSession.ZOSMF_CONNECTION_OPTIONS),

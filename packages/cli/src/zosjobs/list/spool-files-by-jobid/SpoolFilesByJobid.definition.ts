@@ -9,6 +9,7 @@
 *
 */
 
+import SpoolFilesHandler from "./SpoolFilesByJobid.handler";
 import { ICommandDefinition } from "@zowe/imperative";
 
 export const SpoolFilesByJobidDefinition: ICommandDefinition = {
@@ -19,7 +20,7 @@ export const SpoolFilesByJobidDefinition: ICommandDefinition = {
     description: "Given a z/OS job JOBID, list the spool files (DDs) for a z/OS job on the JES/spool queues. " +
         "The command does not pre-validate the JOBID. " +
         "The command presents errors verbatim from the z/OSMF Jobs REST endpoints.",
-    handler: __dirname + "/SpoolFilesByJobid.handler",
+    handler: SpoolFilesHandler,
     profile: {
         optional: ["zosmf"]
     },

@@ -9,6 +9,7 @@
 *
 */
 
+import ClassicPDSHandler from "./ClassicPDS.handler";
 import { ICommandDefinition } from "@zowe/imperative";
 import { CreateDefaults } from "@zowe/zos-files-for-zowe-sdk";
 import { ZosFilesCreateExtraOptions, ZosFilesCreateOptions } from "../Create.options";
@@ -27,7 +28,7 @@ export const ClassicPDSDefinition: ICommandDefinition = {
     summary: strings.ACTIONS.DATA_SET_CLASSIC.SUMMARY,
     description: strings.ACTIONS.DATA_SET_CLASSIC.DESCRIPTION,
     type: "command",
-    handler: __dirname + "/ClassicPDS.handler",
+    handler: ClassicPDSHandler,
     profile: {
         optional: ["zosmf"]
     },

@@ -9,6 +9,7 @@
 *
 */
 
+import VsamHandler from "./vsam.handler";
 import { ICommandDefinition } from "@zowe/imperative";
 import { VsamCreateOptions } from "./vsam.options";
 import { ZosFilesConstants, CreateDefaults } from "@zowe/zos-files-for-zowe-sdk";
@@ -49,7 +50,7 @@ export const VsamDefinition: ICommandDefinition = {
     summary: vsamStrings.SUMMARY,
     description: vsamStrings.DESCRIPTION,
     type: "command",
-    handler: __dirname + "/vsam.handler",
+    handler: VsamHandler,
     profile: {
         optional: ["zosmf"]
     },

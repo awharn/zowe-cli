@@ -20,6 +20,8 @@ import { readFileSync, writeFileSync } from "jsonfile";
 import { IPluginCfgProps } from "./doc/IPluginCfgProps";
 import { ICommandDefinition, ICommandProfileTypeConfiguration } from "../../../cmd";
 import { IssueSeverity, PluginIssues } from "./utilities/PluginIssues";
+import { formPluginRuntimePath, requirePluginModuleCallback } from "./utilities/PluginModuleResolver";
+import { PluginCfgPropsStore } from "./utilities/PluginCfgPropsStore";
 import { ConfigurationValidator } from "../ConfigurationValidator";
 import { ConfigurationLoader } from "../ConfigurationLoader";
 import { DefinitionTreeResolver } from "../DefinitionTreeResolver";
@@ -59,15 +61,10 @@ export class PluginManagementFacility {
     }
 
     /**
-     * Internal reference to the set of configuration properties for all loaded plugins.
-     */
-    private mAllPluginCfgProps: IPluginCfgProps[] = [];
-
-    /**
      * Get the set of configuration properties for all loaded plugins.
      */
     public get allPluginCfgProps(): IPluginCfgProps[] {
-        return this.mAllPluginCfgProps;
+        return PluginCfgPropsStore.allPluginCfgProps;
     }
 
     /**
@@ -197,7 +194,7 @@ export class PluginManagementFacility {
         this.resolvedCliCmdTree = resolvedCliCmdTree;
 
         // Loop through each plugin and add it to the CLI command tree
-        for (const nextPluginCfgProps of this.mAllPluginCfgProps) {
+        for (const nextPluginCfgProps of PluginCfgPropsStore.allPluginCfgProps) {
             this.addPluginToHostCli(nextPluginCfgProps);
 
             // log the issue list for this plugin
@@ -241,7 +238,7 @@ export class PluginManagementFacility {
         for (const nextPluginNm of Object.keys(this.pluginIssues.getInstalledPlugins())) {
             const nextPluginCfgProps = this.loadPluginCfgProps(nextPluginNm);
             if (nextPluginCfgProps) {
-                this.mAllPluginCfgProps.push(nextPluginCfgProps);
+                PluginCfgPropsStore.allPluginCfgProps.push(nextPluginCfgProps);
 
                 // Keep the overrides in a temporary object indexed by plugin name
                 loadedOverrides[nextPluginNm] = nextPluginCfgProps.impConfig.overrides;
@@ -365,19 +362,7 @@ export class PluginManagementFacility {
      */
     public requirePluginModuleCallback(pluginName: string): ((relativePath: string) => any) {
 
-        return (relativePath: string) => {
-            const pluginModuleRuntimePath = this.formPluginRuntimePath(pluginName, relativePath);
-            try {
-                return require(pluginModuleRuntimePath);
-            } catch (requireError) {
-                PluginIssues.instance.recordIssue(pluginName, IssueSeverity.CMD_ERROR,
-                    "Unable to load the following module for plug-in '" +
-                    pluginName + "' :\n" + pluginModuleRuntimePath + "\n" +
-                    "Reason = " + requireError.message
-                );
-                return {};
-            }
-        };
+        return requirePluginModuleCallback(pluginName);
     }
 
     // __________________________________________________________________________
@@ -688,27 +673,7 @@ export class PluginManagementFacility {
         pluginName: string,
         relativePath: string = ""
     ): string {
-        // Attempt to find the node_modules that contains the plugin
-        let pluginRuntimeDir = null;
-        for (const location of this.pmfConst.PLUGIN_NODE_MODULE_LOCATION) {
-            pluginRuntimeDir = join(location, pluginName);
-            if (existsSync(pluginRuntimeDir)) {
-                break;
-            }
-        }
-
-        if (relativePath.length === 0) {
-            return pluginRuntimeDir;
-        }
-
-        /* If the relative path is already absolute, do not place our
-         * plugin's runtime location in front of the supplied path.
-         */
-        if (isAbsolute(relativePath)) {
-            return relativePath;
-        }
-
-        return join(pluginRuntimeDir, relativePath);
+        return formPluginRuntimePath(pluginName, relativePath);
     }
 
     // __________________________________________________________________________
@@ -1168,7 +1133,7 @@ export class PluginManagementFacility {
                                         // the chained handler doesn't contain a handler
                                         this.pluginIssues.recordIssue(pluginName, IssueSeverity.CMD_ERROR,
                                             "Command name = '" + pluginCmdName + "' has no 'handler' property in one of its chained handlers.");
-                                    } else {
+                                    } else if (typeof cmdHandler.handler === "string") {
                                         // the handler file must exist
                                         const handlerModulePath =
                                             this.formPluginRuntimePath(pluginName, cmdHandler.handler);
@@ -1181,6 +1146,8 @@ export class PluginManagementFacility {
                                                 "A chained handler for command = '" + pluginCmdName +
                                                 "' does not exist: " + handlerFilePath);
                                         }
+                                    } else {
+                                        // the handler was provided directly as a class - no handler file lookup is necessary
                                     }
                                 }
                             } else {

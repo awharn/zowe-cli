@@ -9,7 +9,7 @@
 *
 */
 
-import * as path from "path";
+import FsHandler from "./Fs.handler";
 import { ICommandDefinition } from "@zowe/imperative";
 import { ListOptions } from "../List.options";
 import i18nTypings from "../../-strings-/en";
@@ -28,7 +28,7 @@ export const FsDefinition: ICommandDefinition = {
     description: strings.DESCRIPTION,
     type: "command",
     outputFormatOptions: true,
-    handler: path.join(__dirname, "Fs.handler"),
+    handler: FsHandler,
     profile: {
         optional: ["zosmf"]
     },

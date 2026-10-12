@@ -9,6 +9,7 @@
 *
 */
 
+import FsHandler from "./fs.handler";
 import { ICommandDefinition } from "@zowe/imperative";
 
 import i18nTypings from "../../-strings-/en";
@@ -23,7 +24,7 @@ export const FsDefinition: ICommandDefinition = {
     summary: fsStrings.SUMMARY,
     description: fsStrings.DESCRIPTION,
     type: "command",
-    handler: __dirname + "/fs.handler",
+    handler: FsHandler,
     profile: {
         optional: ["zosmf"]
     },

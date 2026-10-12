@@ -9,6 +9,7 @@
 *
 */
 
+import Handler from "./DeleteInstance.handler";
 import { ICommandDefinition } from "@zowe/imperative";
 
 export const DeleteInstanceDefinition: ICommandDefinition = {
@@ -17,7 +18,7 @@ export const DeleteInstanceDefinition: ICommandDefinition = {
     type: "command",
     summary: "Deletes instance",
     description: "Deletes selected deprovisioned instance.",
-    handler: __dirname + "/DeleteInstance.handler",
+    handler: Handler,
     profile: {
         optional: ["zosmf"]
     },

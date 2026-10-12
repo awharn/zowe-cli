@@ -9,6 +9,7 @@
 *
 */
 
+import SharedSubmitHandler from "../Submit.shared.handler";
 import i18nTypings from "../../-strings-/en";
 
 // Does not use the import in anticipation of some internationalization work to be done later.
@@ -22,7 +23,7 @@ export const USSFileDefinition: ICommandDefinition = {
     type: "command",
     summary: strings.USS_FILE.SUMMARY,
     description: strings.USS_FILE.DESCRIPTION,
-    handler: __dirname + "/../Submit.shared.handler",
+    handler: SharedSubmitHandler,
     positionals: [
         {
             name: "file",

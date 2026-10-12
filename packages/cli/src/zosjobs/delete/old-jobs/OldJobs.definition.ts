@@ -9,6 +9,7 @@
 *
 */
 
+import OldJobsHandler from "./OldJobs.handler";
 import { ICommandDefinition } from "@zowe/imperative";
 import { ZosJobsOptions } from "../../ZosJobs.options";
 
@@ -22,7 +23,7 @@ export const OldJobsDefinition: ICommandDefinition = {
     type: "command",
     summary: strings.ACTIONS.OLD_JOBS.SUMMARY,
     description: strings.ACTIONS.OLD_JOBS.DESCRIPTION,
-    handler: __dirname + "/OldJobs.handler",
+    handler: OldJobsHandler,
     profile: {
         optional: ["zosmf"]
     },

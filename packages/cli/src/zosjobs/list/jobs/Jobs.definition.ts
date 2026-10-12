@@ -9,6 +9,7 @@
 *
 */
 
+import JobsHandler from "./Jobs.handler";
 import { ICommandDefinition, ICommandOptionDefinition } from "@zowe/imperative";
 
 export const JobsDefinition: ICommandDefinition = {
@@ -21,7 +22,7 @@ export const JobsDefinition: ICommandDefinition = {
         "The command does not prevalidate your user ID. " +
         "The command surfaces errors verbatim from the z/OSMF Jobs REST endpoints.",
     type: "command",
-    handler: __dirname + "/Jobs.handler",
+    handler: JobsHandler,
     options: ([
         {
             name: "owner", aliases: ["o"],

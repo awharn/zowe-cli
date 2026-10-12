@@ -275,6 +275,7 @@ export class Imperative {
              * Build the help generator factory - requires the root command name and the loaded configuration document
              */
             this.mHelpGeneratorFactory = new ImperativeHelpGeneratorFactory(this.rootCommandName, ImperativeConfig.instance.loadedConfig);
+            ImperativeConfig.instance.helpGeneratorFactory = this.mHelpGeneratorFactory;
 
             // resolve command module globs, forming the root of the CLI command tree
             this.log.info(`Loaded and validated config for '${config.name}'. Config details at trace level of logging.`);
@@ -602,6 +603,7 @@ export class Imperative {
             );
         }
         Imperative.mFullCommandTree = preparedHostCliCmdTree;
+        ImperativeConfig.instance.fullCommandTree = preparedHostCliCmdTree;
         WebHelpManager.instance.fullCommandTree = Imperative.mFullCommandTree;
     }
 

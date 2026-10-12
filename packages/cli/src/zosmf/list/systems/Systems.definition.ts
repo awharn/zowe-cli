@@ -9,6 +9,7 @@
 *
 */
 
+import Handler from "./Systems.handler";
 import { ICommandDefinition } from "@zowe/imperative";
 import { ZosmfSession } from "@zowe/zosmf-for-zowe-sdk";
 
@@ -17,7 +18,7 @@ export const SystemsDefinition: ICommandDefinition = {
     summary: "Obtain a list of systems that are defined to a z/OSMF instance",
     description: "Obtain a list of systems that are defined to a z/OSMF instance.",
     type: "command",
-    handler: __dirname + "/Systems.handler",
+    handler: Handler,
     profile: {
         optional: ["zosmf"]
     },

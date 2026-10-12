@@ -9,6 +9,7 @@
 *
 */
 
+import Handler from "./Status.handler";
 import { ICommandDefinition } from "@zowe/imperative";
 import { ZosmfSession } from "@zowe/zosmf-for-zowe-sdk";
 
@@ -19,7 +20,7 @@ export const StatusDefinition: ICommandDefinition = {
         "information about the z/OSMF server for diagnostic purposes. The command outputs properties " +
         "of the z/OSMF server such as version, hostname, and installed plug-ins.",
     type: "command",
-    handler: __dirname + "/Status.handler",
+    handler: Handler,
     profile: {
         optional: ["zosmf"]
     },

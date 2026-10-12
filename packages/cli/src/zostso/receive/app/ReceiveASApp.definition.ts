@@ -9,6 +9,7 @@
 *
 */
 
+import Handler from "./ReceiveASApp.handler";
 import { ICommandDefinition, ICommandOptionDefinition } from "@zowe/imperative";
 import { TsoProfileConstants } from "@zowe/zos-tso-for-zowe-sdk";
 
@@ -18,7 +19,7 @@ export const ReceiveASApp: ICommandDefinition = {
     summary: "Receive message from TSO address space app",
     description: "Receive message from TSO address space app,",
     type: "command",
-    handler: __dirname + "/ReceiveASApp.handler",
+    handler: Handler,
     profile: {
         optional: ["zosmf", "tso"]
     },

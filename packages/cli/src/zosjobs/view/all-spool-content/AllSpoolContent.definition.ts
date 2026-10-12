@@ -9,6 +9,7 @@
 *
 */
 
+import AllSpoolContentHandler from "./AllSpoolContent.handler";
 import { ICommandDefinition } from "@zowe/imperative";
 
 export const AllSpoolContentDefinition: ICommandDefinition = {
@@ -19,7 +20,7 @@ export const AllSpoolContentDefinition: ICommandDefinition = {
     description: "View the contents of each spool file from a z/OS job on spool/JES queues. " +
     "The command does not pre-validate the JOBID. " +
     "The command presents errors verbatim from the z/OSMF Jobs REST endpoints.",
-    handler: __dirname + "/AllSpoolContent.handler",
+    handler: AllSpoolContentHandler,
     profile: {
         optional: ["zosmf"]
     },

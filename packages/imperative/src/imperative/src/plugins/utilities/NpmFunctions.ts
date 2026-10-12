@@ -22,7 +22,11 @@ import { INpmRegistryInfo } from "../doc/INpmRegistryInfo";
 import { Logger } from "../../../../logger";
 import { ImperativeError } from "../../../../error";
 
-const npmCmd = findNpmOnPath();
+/**
+ * Cached result of the npm command lookup, resolved lazily so that importing
+ * this module does not require npm to be present on the PATH.
+ */
+let npmCmd: string;
 
 /**
  * Common function that returns npm command as a string.
@@ -31,6 +35,19 @@ const npmCmd = findNpmOnPath();
  */
 export function findNpmOnPath(): string {
     return which.sync("npm");
+}
+
+/**
+ * Common function that returns npm command as a string, resolving the npm
+ * location on the PATH on first use and caching the result.
+ *
+ * @return {string} command with npm path
+ */
+export function getNpmCmd(): string {
+    if (npmCmd == null) {
+        npmCmd = findNpmOnPath();
+    }
+    return npmCmd;
 }
 
 /**
@@ -83,11 +100,11 @@ export function installPackages(npmPackage: string, npmArgs: INpmInstallArgs, ve
     let execOutput = "";
     const daemonStream = ImperativeConfig.instance.daemonContext?.stream;
     if (verbose && daemonStream == null) {
-        ExecUtils.spawnWithInheritedStdio(npmCmd, args, {
+        ExecUtils.spawnWithInheritedStdio(getNpmCmd(), args, {
             cwd: PMFConstants.instance.PMF_ROOT,
         });
     } else {
-        execOutput = ExecUtils.spawnAndGetOutput(npmCmd, args, {
+        execOutput = ExecUtils.spawnAndGetOutput(getNpmCmd(), args, {
             cwd: PMFConstants.instance.PMF_ROOT,
             stdio: pipe
         }).toString();
@@ -116,7 +133,7 @@ export function getPackageInfo(pkgSpec: string): { name: string, version: string
         // eslint-disable-next-line @typescript-eslint/no-magic-numbers
         const maxBuffer = 1024 * 1024 * 10; // 10MB
         execOutput = ExecUtils.spawnAndGetOutput(
-            npmCmd, ["pack", pkgSpec, "--dry-run", "--json"], { maxBuffer }
+            getNpmCmd(), ["pack", pkgSpec, "--dry-run", "--json"], { maxBuffer }
         ).toString();
 
         // In test pipelines, parallel tests use Git to retrieve source to compile and to
@@ -177,7 +194,7 @@ export class NpmRegistryUtils {
      */
     public static getRegistry(userRegistry?: string): string {
         if (userRegistry != null) return userRegistry;
-        const execOutput = ExecUtils.spawnAndGetOutput(npmCmd, ["config", "get", "registry"]);
+        const execOutput = ExecUtils.spawnAndGetOutput(getNpmCmd(), ["config", "get", "registry"]);
         return execOutput.toString().replace("\n", "");
     }
 
@@ -186,7 +203,7 @@ export class NpmRegistryUtils {
      * @param {string} registry The npm registry to install from.
      */
     public static npmLogin(registry: string) {
-        ExecUtils.spawnAndGetOutput(npmCmd,
+        ExecUtils.spawnAndGetOutput(getNpmCmd(),
             [
                 "login",
                 "--registry", registry,
@@ -238,7 +255,7 @@ export class NpmRegistryUtils {
     }
 
     private static getScopeRegistry(scope: string): string | undefined {
-        const execOutput = ExecUtils.spawnAndGetOutput(npmCmd, ["config", "get", `${scope}:registry`]);
+        const execOutput = ExecUtils.spawnAndGetOutput(getNpmCmd(), ["config", "get", `${scope}:registry`]);
         if (execOutput.toString().trim() === "undefined") return;
         return execOutput.toString().replace("\n", "");
     }

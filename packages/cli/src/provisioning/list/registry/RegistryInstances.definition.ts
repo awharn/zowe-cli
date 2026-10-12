@@ -9,8 +9,8 @@
 *
 */
 
+import RegistryInstancesHandler from "./RegistryInstances.handler";
 import { ICommandDefinition } from "@zowe/imperative";
-import * as path from "path";
 
 export const registryInstances: ICommandDefinition = {
     name: "registry-instances",
@@ -18,7 +18,7 @@ export const registryInstances: ICommandDefinition = {
     type: "command",
     summary: "List provisioned instances",
     description: "List the provisioned instances from the z/OSMF software registry.",
-    handler:  path.join(__dirname, "/RegistryInstances.handler"),
+    handler: RegistryInstancesHandler,
     profile: {
         optional: ["zosmf"]
     },

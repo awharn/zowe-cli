@@ -9,7 +9,7 @@
 *
 */
 
-import { join } from "path";
+import ExportRedactedHandler from "./exportRedacted.handler";
 import { ICommandDefinition } from "../../../../../cmd";
 
 export const exportRedactedDefinition: ICommandDefinition = {
@@ -19,7 +19,7 @@ export const exportRedactedDefinition: ICommandDefinition = {
     summary: "Export Zowe configuration with redacted values",
     description: "Export your Zowe configuration with sensitive values redacted and common properties given matching keys for " +
         "troubleshooting and sharing purposes.",
-    handler: join(__dirname, "exportRedacted.handler"),
+    handler: ExportRedactedHandler,
     options: [
         {
             name: "redact-strings",

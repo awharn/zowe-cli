@@ -14,8 +14,9 @@ jest.mock("../../../imperative/src/Imperative");
 
 import { TestLogger } from "../../../../__tests__/src/TestLogger";
 import { CommandPreparer } from "../../../cmd/src/CommandPreparer";
-import { ICommandDefinition, CommandResponse, ICommandHandler } from "../../../cmd";
+import { ICommandDefinition, CommandResponse, ICommandHandler, DefaultHelpGenerator } from "../../../cmd";
 import { ICommandHandlerRequire } from "../../../cmd/src/doc/handler/ICommandHandlerRequire";
+import { IHelpGeneratorParms } from "../../../cmd/src/help/doc/IHelpGeneratorParms";
 import { ImperativeConfig } from "../../../utilities/src/ImperativeConfig";
 
 /* eslint-disable-next-line jest/no-mocks-import */
@@ -94,6 +95,16 @@ describe("Default Root Command Handler", () => {
 
     beforeEach(() => {
         process.env.FORCE_COLOR = "0";
+
+        // The handler now reads its data from ImperativeConfig instead of Imperative
+        const configInst: any = ImperativeConfig.instance;
+        configInst.rootCommandName = "mock_command_name";
+        configInst.fullCommandTree = MOCKED_COMMAND_TREE;
+        configInst.loadedConfig = { ...configInst.loadedConfig, primaryTextColor: "yellow" };
+        configInst.helpGeneratorFactory = {
+            getHelpGenerator: (parms: IHelpGeneratorParms) => new DefaultHelpGenerator(
+                { produceMarkdown: false, primaryHighlightColor: "yellow", rootCommandName: "mock" }, parms)
+        };
     });
 
     afterEach(() => {

@@ -9,6 +9,7 @@
 *
 */
 
+import JobHandler from "./Job.handler";
 import { ICommandDefinition } from "@zowe/imperative";
 
 import i18nTypings from "../../-strings-/en";
@@ -20,7 +21,7 @@ export const JobDefinition: ICommandDefinition = {
     type: "command",
     summary: strings.ACTIONS.JOB.SUMMARY,
     description: strings.ACTIONS.JOB.DESCRIPTION,
-    handler: __dirname + "/Job.handler",
+    handler: JobHandler,
     profile: {
         optional: ["zosmf"]
     },

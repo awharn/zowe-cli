@@ -10,7 +10,9 @@
 */
 
 import * as path from "path";
-import { ICommandHandler, IHandlerParameters, ImperativeConfig, ImperativeError, TextUtils } from "../../../../..";
+import { ICommandHandler, IHandlerParameters } from "../../../../../cmd";
+import { ImperativeConfig, TextUtils } from "../../../../../utilities";
+import { ImperativeError } from "../../../../../error";
 
 export default class ExportRedactedHandler implements ICommandHandler {
     public async process(params: IHandlerParameters): Promise<void> {

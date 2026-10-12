@@ -9,6 +9,7 @@
 *
 */
 
+import AllMembersMatchingHandler from "./AllMembersMatching.handler";
 import { ICommandDefinition } from "@zowe/imperative";
 import { DownloadOptions } from "../Download.options";
 import i18nTypings from "../../-strings-/en";
@@ -26,7 +27,7 @@ export const AllMembersMatchingDefinition: ICommandDefinition = {
     summary: strings.SUMMARY,
     description: strings.DESCRIPTION,
     type: "command",
-    handler: __dirname + "/AllMembersMatching.handler",
+    handler: AllMembersMatchingHandler,
     profile: {
         optional: ["zosmf"]
     },

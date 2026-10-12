@@ -12,6 +12,8 @@
 
 import { Config } from "../../../config/src/__mocks__/Config";
 import { IImperativeConfig } from "../../../imperative/src/doc/IImperativeConfig";
+import type { ICommandDefinition } from "../../../cmd/src/doc/ICommandDefinition";
+import type { IHelpGeneratorFactory } from "../../../cmd/src/help/doc/IHelpGeneratorFactory";
 
 export class ImperativeConfig {
     private static mInstance: ImperativeConfig = null;
@@ -68,6 +70,36 @@ export class ImperativeConfig {
 
     public set loadedConfig(config: IImperativeConfig) {
         this.mLoadedConfig = config;
+    }
+
+    private mRootCommandName: string = null;
+
+    public set rootCommandName(rootCommandName: string) {
+        this.mRootCommandName = rootCommandName;
+    }
+
+    public get rootCommandName(): string {
+        return this.mRootCommandName;
+    }
+
+    private mFullCommandTree: ICommandDefinition = null;
+
+    public set fullCommandTree(tree: ICommandDefinition) {
+        this.mFullCommandTree = tree;
+    }
+
+    public get fullCommandTree(): ICommandDefinition {
+        return this.mFullCommandTree;
+    }
+
+    private mHelpGeneratorFactory: IHelpGeneratorFactory = null;
+
+    public set helpGeneratorFactory(factory: IHelpGeneratorFactory) {
+        this.mHelpGeneratorFactory = factory;
+    }
+
+    public get helpGeneratorFactory(): IHelpGeneratorFactory {
+        return this.mHelpGeneratorFactory;
     }
 
     public get hostPackageName(): string {

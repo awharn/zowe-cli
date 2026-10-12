@@ -9,6 +9,7 @@
 *
 */
 
+import Handler from "./StartASApp.handler";
 import { ICommandDefinition, ICommandOptionDefinition } from "@zowe/imperative";
 import { TsoProfileConstants } from "@zowe/zos-tso-for-zowe-sdk";
 
@@ -18,7 +19,7 @@ export const StartASApp: ICommandDefinition = {
     summary: "Start application at TSO address space",
     description: "Start application at TSO address space,",
     type: "command",
-    handler: __dirname + "/StartASApp.handler",
+    handler: Handler,
     profile: {
         optional: ["zosmf", "tso"]
     },

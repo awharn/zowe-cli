@@ -9,6 +9,7 @@
 *
 */
 
+import ZfsHandler from "./zfs.handler";
 import { ICommandDefinition } from "@zowe/imperative";
 import { ZfsCreateOptions } from "./zfs.options";
 import { ZosFilesCreateOptions } from "../Create.options";
@@ -24,7 +25,7 @@ export const ZfsDefinition: ICommandDefinition = {
     summary: zfsStrings.SUMMARY,
     description: zfsStrings.DESCRIPTION,
     type: "command",
-    handler: __dirname + "/zfs.handler",
+    handler: ZfsHandler,
     profile: {
         optional: ["zosmf"]
     },

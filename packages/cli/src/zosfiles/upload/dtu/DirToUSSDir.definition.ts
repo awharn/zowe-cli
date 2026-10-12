@@ -9,7 +9,7 @@
 *
 */
 
-import * as path from "path";
+import DirToUSSDirHandler from "./DirToUSSDir.handler";
 import { ICommandDefinition } from "@zowe/imperative";
 import { UploadOptions } from "../Upload.options";
 import i18nTypings from "../../-strings-/en";
@@ -27,7 +27,7 @@ export const DirToUSSDirDefinition: ICommandDefinition = {
     summary: strings.SUMMARY,
     description: strings.DESCRIPTION,
     type: "command",
-    handler: path.join(__dirname, "/DirToUSSDir.handler"),
+    handler: DirToUSSDirHandler,
     profile: {
         optional: ["zosmf"]
     },

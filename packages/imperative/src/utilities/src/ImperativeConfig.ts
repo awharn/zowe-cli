@@ -18,6 +18,8 @@ import { IDaemonContext } from "../../imperative/src/doc/IDaemonContext";
 import { ICommandProfileSchema } from "../../cmd";
 import { Config } from "../../config";
 import { sync } from "find-up";
+import type { ICommandDefinition } from "../../cmd/src/doc/ICommandDefinition";
+import type { IHelpGeneratorFactory } from "../../cmd/src/help/doc/IHelpGeneratorFactory";
 
 /**
  * This class is used to contain all configuration being set by Imperative.
@@ -50,6 +52,16 @@ export class ImperativeConfig {
      * Current command needed for processing
      */
     private mCommandLine: string;
+
+    /**
+     * The complete full command tree of the CLI, set during Imperative.init().
+     */
+    private mFullCommandTree: ICommandDefinition;
+
+    /**
+     * The help generator factory for the CLI, set during Imperative.init().
+     */
+    private mHelpGeneratorFactory: IHelpGeneratorFactory;
 
     /**
      * This parameter is used to contain the caller location of imperative configuration file.
@@ -154,6 +166,38 @@ export class ImperativeConfig {
      */
     public get rootCommandName(): string {
         return this.mRootCommandName;
+    }
+
+    /**
+     * Set the complete full command tree of the CLI.
+     * @param tree - the fully prepared command tree
+     */
+    public set fullCommandTree(tree: ICommandDefinition) {
+        this.mFullCommandTree = tree;
+    }
+
+    /**
+     * Get the complete full command tree of the CLI.
+     * @returns The fully prepared command tree, if Imperative.init() has completed
+     */
+    public get fullCommandTree(): ICommandDefinition {
+        return this.mFullCommandTree;
+    }
+
+    /**
+     * Set the help generator factory of the CLI.
+     * @param factory - the help generator factory created during Imperative.init()
+     */
+    public set helpGeneratorFactory(factory: IHelpGeneratorFactory) {
+        this.mHelpGeneratorFactory = factory;
+    }
+
+    /**
+     * Get the help generator factory of the CLI.
+     * @returns The help generator factory, if Imperative.init() has completed
+     */
+    public get helpGeneratorFactory(): IHelpGeneratorFactory {
+        return this.mHelpGeneratorFactory;
     }
 
     /**

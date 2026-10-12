@@ -9,6 +9,7 @@
 *
 */
 
+import DatasetHandler from "./Dataset.handler";
 import { ICommandDefinition } from "@zowe/imperative";
 import { DownloadOptions } from "../Download.options";
 import i18nTypings from "../../-strings-/en";
@@ -26,7 +27,7 @@ export const DatasetDefinition: ICommandDefinition = {
     summary: strings.SUMMARY,
     description: strings.DESCRIPTION,
     type: "command",
-    handler: __dirname + "/Dataset.handler",
+    handler: DatasetHandler,
     profile: {
         optional: ["zosmf"]
     },

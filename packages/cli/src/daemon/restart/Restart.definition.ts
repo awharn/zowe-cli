@@ -9,6 +9,7 @@
 *
 */
 
+import RestartDaemonHandler from "./Restart.handler";
 import { ICommandDefinition } from "@zowe/imperative";
 
 export const RestartCommand: ICommandDefinition = {
@@ -16,7 +17,7 @@ export const RestartCommand: ICommandDefinition = {
     summary: "Restart the Zowe CLI daemon",
     description: "Restart the Zowe CLI daemon.",
     type: "command",
-    handler: __dirname + "/Restart.handler",
+    handler: RestartDaemonHandler,
     examples: [
         {
             description: "Restart daemon",

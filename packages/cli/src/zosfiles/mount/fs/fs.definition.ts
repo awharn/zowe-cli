@@ -9,6 +9,7 @@
 *
 */
 
+import FsHandler from "./fs.handler";
 import { ICommandDefinition } from "@zowe/imperative";
 import { FsMountOptions } from "./fs.options";
 
@@ -24,7 +25,7 @@ export const FsDefinition: ICommandDefinition = {
     summary: fsStrings.SUMMARY,
     description: fsStrings.DESCRIPTION,
     type: "command",
-    handler: __dirname + "/fs.handler",
+    handler: FsHandler,
     profile: {
         optional: ["zosmf"]
     },
