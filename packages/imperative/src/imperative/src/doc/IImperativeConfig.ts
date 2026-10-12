@@ -37,15 +37,20 @@ export interface IImperativeConfig {
     allowConfigGroup?: boolean;
 
     /**
-     * A path to a module (javascript file) that will return a complete IImperativeConfig
-     * object. If you use this option, anything else you specify in package.json
+     * The configuration module for your CLI. This may be provided in one of two ways:
+     *   - an IImperativeConfig object provided directly (e.g. imported in your CLI entry point),
+     *     which avoids a runtime module lookup and allows your CLI to be bundled
+     *     with tools like webpack, or
+     *   - a path to a module (javascript file) that will return a complete IImperativeConfig
+     *     object (the old method, which requires the module at runtime).
+     * If you use this option, anything else you specify in package.json
      * or your manually provided config object (i.e. Imperative.init({...}) will
      * be ignored.
      * Relative to the file that you call Imperative.init() from, unless an absolute path is provided.
-     * @type {string}
+     * @type {string | IImperativeConfig}
      * @memberof IImperativeConfig
      */
-    configurationModule?: string;
+    configurationModule?: string | IImperativeConfig;
 
     /**
      * Array of globs (see npm glob package for details) relative to the file that

@@ -20,7 +20,7 @@ import { DownloadDefinition } from "./download/Download.definition";
 import { ZosmfSession } from "@zowe/zosmf-for-zowe-sdk";
 import { ModifyDefinition } from "./modify/Modify.definition";
 
-export const definition: ICommandDefinition = {
+const definition: ICommandDefinition = {
     name: "zos-jobs",
     aliases: ["jobs"],
     type: "group",
@@ -48,4 +48,4 @@ export const definition: ICommandDefinition = {
     ]
 };
 
-module.exports = definition;
+export = definition;

@@ -13,7 +13,7 @@ import { ICommandDefinition } from "@zowe/imperative";
 import { ZosmfSession } from "@zowe/zosmf-for-zowe-sdk";
 import { ListDefinition } from "./list/List.definition";
 
-export const definition: ICommandDefinition = {
+const definition: ICommandDefinition = {
     name: "zos-logs",
     aliases: ["logs"],
     type: "group",
@@ -32,4 +32,4 @@ export const definition: ICommandDefinition = {
     ]
 };
 
-module.exports = definition;
+export = definition;

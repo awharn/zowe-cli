@@ -19,19 +19,30 @@ import { ZosTsoProfile } from "@zowe/zos-tso-for-zowe-sdk";
 import { ZosUssProfile } from "@zowe/zos-uss-for-zowe-sdk";
 import { ProfileConstants } from "@zowe/core-for-zowe-sdk";
 
+import DaemonDefinition = require("./daemon/Daemon.definition");
+import ProvisioningDefinition = require("./provisioning/Provisioning.definition");
+import WorkflowsDefinition = require("./workflows/Workflows.definition");
+import ZosConsoleDefinition = require("./zosconsole/ZosConsole.definition");
+import ZosFilesDefinition = require("./zosfiles/ZosFiles.definition");
+import ZosJobsDefinition = require("./zosjobs/ZosJobs.definition");
+import ZosmfDefinition = require("./zosmf/Zosmf.definition");
+import ZosTsoDefinition = require("./zostso/ZosTso.definition");
+import ZosUssDefinition = require("./zosuss/ZosUss.definition");
+import ZosLogsDefinition = require("./zoslogs/ZosLogs.definition");
+
 const config: IImperativeConfig = {
     productDisplayName: Constants.DISPLAY_NAME,
-    commandModuleGlobs: [
-        "daemon/*.definition!(.d).*s",
-        "provisioning/*.definition!(.d).*s",
-        "workflows/*.definition!(.d).*s",
-        "zosconsole/*.definition!(.d).*s",
-        "zosfiles/*.definition!(.d).*s",
-        "zosjobs/*.definition!(.d).*s",
-        "zosmf/*.definition!(.d).*s",
-        "zostso/*.definition!(.d).*s",
-        "zosuss/*.definition!(.d).*s",
-        "zoslogs/*.definition!(.d).*s"
+    definitions: [
+        DaemonDefinition,
+        ProvisioningDefinition,
+        WorkflowsDefinition,
+        ZosConsoleDefinition,
+        ZosFilesDefinition,
+        ZosJobsDefinition,
+        ZosmfDefinition,
+        ZosTsoDefinition,
+        ZosUssDefinition,
+        ZosLogsDefinition
     ],
     rootCommandDescription: Constants.DESCRIPTION,
     defaultHome: Constants.HOME_DIR,

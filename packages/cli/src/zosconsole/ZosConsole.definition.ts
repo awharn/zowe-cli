@@ -14,7 +14,7 @@ import { CollectCommand } from "./collect/Collect.definition";
 import { IssueCommand } from "./issue/Issue.definition";
 import { ZosmfSession } from "@zowe/zosmf-for-zowe-sdk";
 
-export const definition: ICommandDefinition = {
+const definition: ICommandDefinition = {
     name: "zos-console",
     aliases: ["console"],
     type: "group",
@@ -41,4 +41,4 @@ export const definition: ICommandDefinition = {
     ]
 };
 
-module.exports = definition;
+export = definition;

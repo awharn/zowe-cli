@@ -13,7 +13,7 @@ import { ICommandDefinition } from "@zowe/imperative";
 import { IssueCommand } from "./issue/Issue.definition";
 import { SshSession } from "@zowe/zos-uss-for-zowe-sdk";
 
-export const definition: ICommandDefinition = {
+const definition: ICommandDefinition = {
     name: "zos-ssh",
     aliases: ["ssh", "zos-uss", "uss"],
     type: "group",
@@ -34,4 +34,4 @@ export const definition: ICommandDefinition = {
     ]
 };
 
-module.exports = definition;
+export = definition;

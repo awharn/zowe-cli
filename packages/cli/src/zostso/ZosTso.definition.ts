@@ -18,7 +18,7 @@ import { IssueCommand } from "./issue/Issue.definition";
 import { ZosmfSession } from "@zowe/zosmf-for-zowe-sdk";
 import { ReceiveCommand } from "./receive/Receive.definition";
 
-export const definition: ICommandDefinition = {
+const definition: ICommandDefinition = {
     name: "zos-tso",
     aliases: ["tso"],
     type: "group",
@@ -39,4 +39,4 @@ export const definition: ICommandDefinition = {
     }]
 };
 
-module.exports = definition;
+export = definition;

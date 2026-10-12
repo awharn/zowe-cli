@@ -52,11 +52,15 @@ export class ConfigurationLoader {
         }
 
         // if the user has specified a configuration module,
-        // override the config with the content of the module specified
+        // override the config with the content of the module specified.
+        // The configuration module may be provided directly as an object,
+        // or via the old method as a path to a module to require.
         if (config.configurationModule != null) {
             try {
                 const daemonMode = config.daemonMode;
-                config = callerFileRequirer(config.configurationModule);
+                config = typeof config.configurationModule === "string" ?
+                    callerFileRequirer(config.configurationModule) :
+                    config.configurationModule;
                 if (daemonMode) {config.daemonMode = daemonMode;}
             } catch (e) {
                 throw new ImperativeError({

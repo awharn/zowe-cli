@@ -14,11 +14,11 @@ import { IImperativeConfig, Imperative } from "@zowe/imperative";
 import { Constants } from "./Constants";
 import { inspect } from "util";
 import { DaemonDecider } from "./daemon/DaemonDecider";
-import { join } from "path";
+import cliConfig = require("./imperative");
 
 // TODO(Kelosky): if we remove this, imperative fails to find config in package.json & we must debug this.
 const config: IImperativeConfig = {
-    configurationModule: join(__dirname, "imperative")
+    configurationModule: cliConfig
 };
 
 (async () => {
