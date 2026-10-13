@@ -41,7 +41,7 @@
   "scripts": {
     "postinstall": "node ./scripts/validatePlugins && node ./scripts/printSuccessMessage && node ./scripts/validateSecretsPrebuild",
     "build": "tsc --pretty",
-    "bundle": "webpack --config webpack.config.js",
+    "bundle": "webpack --config webpack.config.js && node scripts/collectExternalDeps.js",
     "watch": "tsc --pretty --watch",
     "clean": "rimraf lib",
     "lint": "eslint \"src/**/*.ts\" \"**/__tests__/**/*.ts\"",

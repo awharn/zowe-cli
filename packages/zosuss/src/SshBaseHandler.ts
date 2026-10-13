@@ -29,7 +29,6 @@ import {
 import { SshSession } from "./SshSession";
 import { ISshSession } from "./doc/ISshSession";
 import { ZosUssMessages } from "./constants/ZosUss.messages";
-import { utils } from "ssh2";
 import * as fs from "fs";
 
 /**
@@ -120,6 +119,8 @@ export abstract class SshBaseHandler implements ICommandHandler {
                                             name: "keyPassphrase",
                                             isGivenValueValid: (givenValue: string) => {
                                                 let saveKP: boolean = true;
+                                                // lazy load to reduce the number of modules read during CLI initialization
+                                                const {utils} = require("ssh2") as typeof import("ssh2");
                                                 const result = utils.parseKey(
                                                     fs.readFileSync(
                                                         sshSessCfgWithCreds.privateKey

@@ -10,7 +10,7 @@
 */
 
 import { Logger, ImperativeError } from "@zowe/imperative";
-import { ClientChannel, Client } from "ssh2";
+import type { ClientChannel, Client } from "ssh2";
 import { createHash } from "crypto";
 import { SshSession } from "./SshSession";
 import { ZosUssMessages } from "./constants/ZosUss.messages";
@@ -45,6 +45,7 @@ export class Shell {
         let hasAuthFailed = false;
         const connState: IConnectionState = { hostKeyRejected: false, hostKeyChanged: false };
         const promise = new Promise<any>((resolve, reject) => {
+            const {Client} = require("ssh2") as typeof import("ssh2");
             const conn = new Client();
             conn.on("ready", () => {
                 conn.shell((err: any, stream: ClientChannel) => {
@@ -147,6 +148,7 @@ export class Shell {
         let hasAuthFailed = false;
         const connState: IConnectionState = { hostKeyRejected: false, hostKeyChanged: false };
         const promise = new Promise<any>((resolve, reject) => {
+            const {Client} = require("ssh2") as typeof import("ssh2");
             const conn = new Client();
             conn.on("ready", () => {
                 conn.exec(command, (err: any, stream: ClientChannel) => {
@@ -462,6 +464,7 @@ export class Shell {
     public static async isConnectionValid(session: SshSession): Promise<boolean>{
         const connState: IConnectionState = { hostKeyRejected: false, hostKeyChanged: false };
         return new Promise((resolve, reject) => {
+            const {Client} = require("ssh2") as typeof import("ssh2");
             const conn = new Client();
             conn.on("ready", () => conn.end() && resolve(true)).on("error", () => {
                 if (connState.hostKeyRejected) {

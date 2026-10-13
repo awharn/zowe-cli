@@ -128,7 +128,10 @@ export class PluginRequireProvider {
     private constructor(private readonly modules: string[]) {
 
         const hostPackageRoot = path.join(
-            findUp.sync("package.json", {cwd: ImperativeConfig.instance.callerLocation}),
+            findUp.sync("package.json", {cwd: ImperativeConfig.instance.callerLocation}) ??
+            // no package.json exists above the caller (for example, the host CLI
+            // is bundled) - treat the caller's directory as the host package root
+            ImperativeConfig.instance.callerLocation,
             ".."
         );
 

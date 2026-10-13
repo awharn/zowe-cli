@@ -12,6 +12,7 @@ CCS141/
 src/brightside.iml
 /packages/imperative/web-help/package-lock.json
 /packages/cli/node_modules_old
+/packages/cli/bundle
 /zowe-cli
 /dist/
 # Sonar Files

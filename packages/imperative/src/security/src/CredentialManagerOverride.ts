@@ -10,7 +10,6 @@
 */
 
 import * as path from "path";
-import { readJsonSync, writeJsonSync } from "fs-extra";
 
 import { ICredentialManagerNameMap } from "./doc/ICredentialManagerNameMap";
 import { ICredentialManagerOptions } from "./doc/ICredentialManagerOptions";
@@ -244,6 +243,8 @@ export class CredentialManagerOverride {
 
     private static persistSettings(settings: { fileName: string; json: ISettingsFile }): void {
         try {
+            // lazy load to reduce the number of modules read during CLI initialization
+            const {writeJsonSync} = require("fs-extra") as typeof import("fs-extra");
             writeJsonSync(settings.fileName, settings.json, {spaces: 2});
             this.syncCachedSettings(settings.json);
             EventOperator.getZoweProcessor().emitZoweEvent(ZoweSharedEvents.ON_CREDENTIAL_MANAGER_CHANGED);
@@ -284,6 +285,8 @@ export class CredentialManagerOverride {
         };
         try {
             settings.fileName = path.join(ImperativeConfig.instance.cliHome, "settings", "imperative.json");
+            // lazy load to reduce the number of modules read during CLI initialization
+            const {readJsonSync} = require("fs-extra") as typeof import("fs-extra");
             settings.json = readJsonSync(settings.fileName);
         } catch (error) {
             throw new ImperativeError({

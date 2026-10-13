@@ -27,6 +27,16 @@ const config: IImperativeConfig = {
 ImperativeConfig.instance.callerPackageJson = require("../package.json");
 ImperativeConfig.instance.imperativePackageName = require("@zowe/imperative/package.json").name;
 
+// Enable the V8 compile cache when supported (Node.js 22+) so that subsequent
+// CLI startups skip recompiling the bundle. Fails silently on older versions
+// or read-only file systems.
+try {
+    const {enableCompileCache} = require("module") as {enableCompileCache?: () => void};
+    enableCompileCache?.();
+} catch {
+    // compile cache is unavailable - startup proceeds without it
+}
+
 (async () => {
 
     try {
