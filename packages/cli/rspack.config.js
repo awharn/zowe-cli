@@ -33,7 +33,7 @@ class CopyWebHelpPlugin {
 }
 
 /**
- * Webpack configuration that produces a single-file bundle of the Zowe CLI.
+ * Rspack configuration that produces a single-file bundle of the Zowe CLI.
  *
  * The bundle is emitted to `bundle/main.js` so that the `web-help-logo.png`
  * asset (resolved via `__dirname + ".."`) and the `prebuilds/` directory
@@ -55,16 +55,22 @@ module.exports = {
         __dirname: false,
         __filename: false
     },
+    resolve: {
+        alias: {
+            // optional ssh2 dependency; ssh2's try/catch handles its absence
+            "cpu-features": false
+        }
+    },
     optimization: {
         // keep class and function names intact: imperative identifies command
         // handlers (and other components) by their runtime names
-        minimize: false
+        minimize: false,
+        chunkIds: 'natural'
     },
     externalsType: "node-commonjs",
     externals: [
         // native modules - cannot be bundled, loaded from node_modules at runtime
         "@zowe/secrets-for-zowe-sdk",
-        "cpu-features",
         "ssh2",
         // loads its appenders with a runtime-computed require that cannot be
         // statically analyzed - loaded from node_modules at runtime
@@ -78,7 +84,7 @@ module.exports = {
         },
         {
             // The plain-Node fallback in RuntimeRequire references require as a
-            // value, which webpack cannot statically extract. Under webpack the
+            // value, which rspack cannot statically extract. Under rspack the
             // __non_webpack_require__ branch of that expression always wins.
             module: /[\\/]RuntimeRequire\.js$/,
             message: /require function is used in a way in which dependencies cannot be statically extracted/

@@ -10,7 +10,7 @@
 */
 
 /**
- * Collects the webpack external packages and their transitive dependencies from
+ * Collects the bundler external packages and their transitive dependencies from
  * the installed node_modules tree into `bundle/node_modules`, mimicking npm's
  * bundledDependencies behavior: the bundle directory becomes self-contained, so
  * the runtime requires emitted for the externals resolve from the bundle's own
@@ -21,7 +21,7 @@
  * installed tree, the first location wins the flat slot and later copies are
  * nested under the dependent package's own node_modules.
  *
- * Run after webpack (see the "bundle" script in package.json).
+ * Run after rspack (see the "bundle" script in package.json).
  */
 
 const fs = require("fs");
@@ -29,7 +29,7 @@ const path = require("path");
 const {createRequire} = require("module");
 
 /**
- * Must match the `externals` list in webpack.config.js.
+ * Must match the `externals` list in rspack.config.js.
  */
 const EXTERNALS = [
     "@zowe/secrets-for-zowe-sdk",

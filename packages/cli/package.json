@@ -41,7 +41,7 @@
   "scripts": {
     "postinstall": "node ./scripts/validatePlugins && node ./scripts/printSuccessMessage && node ./scripts/validateSecretsPrebuild",
     "build": "tsc --pretty",
-    "bundle": "webpack --config webpack.config.js && node scripts/collectExternalDeps.js",
+    "bundle": "rspack --config rspack.config.js && node scripts/collectExternalDeps.js",
     "watch": "tsc --pretty --watch",
     "clean": "rimraf lib",
     "lint": "eslint \"src/**/*.ts\" \"**/__tests__/**/*.ts\"",
@@ -72,13 +72,12 @@
     "tar": "^7.5.16"
   },
   "devDependencies": {
+    "@rspack/cli": "^2.2.9",
     "@types/diff": "^5.0.9",
     "@types/lodash": "^4.17.6",
     "@zowe/cli-test-utils": "8.39.0",
     "comment-json": "^4.2.3",
     "strip-ansi": "^6.0.1",
-    "webpack": "^5.111.1",
-    "webpack-cli": "^5.1.4",
     "which": "^4.0.0"
   },
   "optionalDependencies": {
